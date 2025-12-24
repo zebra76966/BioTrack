@@ -1,0 +1,92 @@
+/* ===============================
+   Schedule Page Layout
+   =============================== */
+
+.schedule-shell {
+  padding: 28px 32px 40px;
+}
+
+/* Header */
+.schedule-header {
+  margin-bottom: 22px;
+}
+
+.schedule-header h2 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.schedule-header .muted {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #8b8fa3;
+}
+
+/* Grid spacing */
+.schedule-shell .row {
+  row-gap: 24px;
+}
+
+/* Right column sticky behavior (calendar overview) */
+.schedule-shell .col-md-4 {
+  position: sticky;
+  top: 96px; /* below top tabs */
+  align-self: flex-start;
+}
+
+/* General card spacing harmony */
+.schedule-shell .checkup-card,
+.schedule-shell .calendar-overview-card {
+  margin-bottom: 20px;
+}
+
+/* ===============================
+   Buttons (shared look)
+   =============================== */
+
+.show-more-btn {
+  background: transparent;
+  border: none;
+  color: #7c4dff;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.show-more-btn:hover {
+  text-decoration: underline;
+}
+
+.primary-btn {
+  background: #7c4dff;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.primary-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(124, 77, 255, 0.35);
+}
+
+/* ===============================
+   Utility
+   =============================== */
+
+.muted {
+  color: #8b8fa3;
+}
+
+@media (max-width: 992px) {
+  .schedule-shell {
+    padding: 20px 16px 32px;
+  }
+
+  .schedule-shell .col-md-4 {
+    position: static;
+  }
+}

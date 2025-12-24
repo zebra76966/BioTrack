@@ -1,0 +1,93 @@
+.heartbeat-intro {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, #f8f7ff 0%, #ecebff 60%, #e3e1ff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 9999;
+}
+
+/* SVG */
+
+.heartbeat-svg {
+  width: 520px;
+}
+
+.heartbeat-path {
+  fill: none;
+  stroke: #7c6cf4;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 12px rgba(124, 108, 244, 0.35));
+}
+
+/* Logo */
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.biotrack-logo {
+  display: flex;
+  gap: 6px;
+  position: relative;
+}
+
+.dot {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.dot.purple {
+  background: #7c6cf4;
+}
+
+.dot.purple.light {
+  background: #a99dfb;
+}
+
+.dot.yellow {
+  background: #f5c46b;
+  border: 5px solid #f8f7ff;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.logo-text2 {
+  font-size: 40px;
+  font-weight: 600;
+  color: #2e2a55;
+}
+
+/* Particles */
+
+.particles span {
+  position: absolute;
+  bottom: -20px;
+  width: 6px;
+  height: 6px;
+  background: rgba(124, 108, 244, 0.15);
+  border-radius: 50%;
+  animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+  from {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-120vh);
+    opacity: 0;
+  }
+}

@@ -1,0 +1,177 @@
+.insights-page {
+  padding: 24px;
+}
+
+.insights-header {
+  margin-bottom: 20px;
+}
+
+.insight-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.impact-section {
+  margin-bottom: 20px;
+}
+
+.note-card {
+  background: #f7f8fc;
+  border-radius: 16px;
+  padding: 14px;
+  margin-top: 10px;
+}
+
+.insights-page {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.insights-header h2 {
+  margin-bottom: 4px;
+}
+
+.muted {
+  color: #8b8fa3;
+  font-size: 13px;
+}
+
+/* Cards */
+.insight-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+}
+
+/* Score */
+.health-score {
+  text-align: center;
+}
+
+.score-row {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.score {
+  font-size: 44px;
+  font-weight: 700;
+}
+
+.score-unit {
+  font-size: 16px;
+  color: #8b8fa3;
+}
+
+.score-meta {
+  font-size: 13px;
+  color: #8b8fa3;
+}
+
+/* Impact grid */
+.impact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.section-title {
+  margin-bottom: 12px;
+}
+
+.section-title.negative {
+  color: #eb5757;
+}
+
+.section-title.positive {
+  color: #27ae60;
+}
+
+/* Impact cards */
+.impact-card {
+  background: #f7f8fc;
+  border-radius: 18px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.impact-card p {
+  font-size: 13px;
+  margin: 6px 0;
+}
+
+.impact-points {
+  font-weight: 600;
+}
+
+.impact-card.negative .impact-points {
+  color: #eb5757;
+}
+
+.impact-card.positive .impact-points {
+  color: #27ae60;
+}
+
+/* Summary */
+.summary p {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+/* Actions */
+.actions .action-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.actions .action-item:last-child {
+  border-bottom: none;
+}
+
+.confidence-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.confidence-bar {
+  height: 8px;
+  background: #eceef6;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.confidence-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7c4dff, #9b7bff);
+}
+
+.confidence-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notes .note-card {
+  background: #f7f8fc;
+  border-radius: 16px;
+  padding: 14px;
+  margin-top: 10px;
+}
+
+.note-author {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #8b8fa3;
+}

@@ -1,0 +1,261 @@
+/* Card */
+.checkup-card {
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 22px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.04);
+}
+
+/* Header */
+.checkup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.show-more-btn {
+  background: none;
+  border: none;
+  font-size: 13px;
+  color: #7c4dff;
+  cursor: pointer;
+}
+
+/* ---------- DATE ROW (FULL WIDTH) ---------- */
+.date-row {
+  display: flex;
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.date-pill {
+  flex: 1; /* 👈 fills entire row */
+  height: 72px;
+  border-radius: 16px;
+  border: 1px solid #eee;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #8b8fa3;
+  cursor: pointer;
+}
+
+.date-pill .day {
+  font-size: 12px;
+}
+
+.date-pill .date {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.date-pill.active {
+  background: linear-gradient(135deg, #7c4dff, #9b7bff);
+  color: #ffffff;
+  box-shadow: 0 12px 30px rgba(124, 77, 255, 0.4);
+}
+
+/* ---------- APPOINTMENTS ---------- */
+.appointments {
+  display: flex;
+  gap: 14px;
+}
+
+/* Appointment Card */
+.appointment-card {
+  position: relative;
+  flex: 1;
+  display: flex;
+  gap: 14px;
+  background: #f7f8fc;
+  border-radius: 18px;
+  padding: 16px;
+  align-items: flex-start;
+}
+
+/* Doctor avatar */
+.doctor-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+}
+
+/* Info column */
+.appointment-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.appt-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.appt-doctor {
+  font-size: 12px;
+  color: #8b8fa3;
+}
+
+.appt-time {
+  font-size: 12px;
+  color: #8b8fa3;
+  margin-top: 2px;
+}
+
+/* Clinic logo bottom-right */
+.clinic-logo {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  width: 80px;
+
+  opacity: 0.7;
+}
+
+/* Sync text */
+.sync-status {
+  font-size: 12px;
+  color: #8b8fa3;
+}
+
+/* ---------- CAROUSEL ---------- */
+.appointments-carousel {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scroll-snap-type: x mandatory;
+}
+
+.appointments-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+/* ---------- APPOINTMENT CARD ---------- */
+.appointment-card {
+  position: relative;
+  min-width: 400px;
+  background: #f7f8fc;
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  gap: 14px;
+  scroll-snap-align: start;
+  transition: box-shadow 0.25s ease;
+}
+
+.appointment-card:hover {
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Status badge */
+.status-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.status-badge.confirmed {
+  background: rgba(111, 207, 151, 0.2);
+  color: #27ae60;
+}
+
+.status-badge.pending {
+  background: rgba(242, 153, 74, 0.2);
+  color: #f2994a;
+}
+
+/* Avatar */
+.doctor-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+}
+
+/* Info */
+.appointment-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.appt-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.appt-doctor,
+.appt-time {
+  font-size: 12px;
+  color: #8b8fa3;
+}
+
+/* Hover expansion */
+.appt-extra {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 6px;
+  opacity: 0;
+  max-height: 0;
+  transition: all 0.25s ease;
+}
+
+.appointment-card:hover .appt-extra {
+  opacity: 1;
+  max-height: 40px;
+}
+
+/* Clinic logo */
+.clinic-logo {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  width: 80px;
+  /* height: 28px; */
+  opacity: 0.6;
+}
+
+/* FULL MODE */
+.checkup-card.full {
+  padding: 24px;
+}
+
+/* Header actions */
+.checkup-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Grid instead of carousel */
+.appointments-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 18px;
+}
+
+/* Compact keeps carousel */
+.appointments-carousel {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  margin-top: 18px;
+}
+
+/* Primary button */
+.primary-btn {
+  background: #7c4dff;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 12px;
+  cursor: pointer;
+}

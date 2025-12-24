@@ -1,0 +1,64 @@
+.stat-card {
+  background: #ffffff;
+  border: none;
+  border-radius: 20px;
+  padding: 18px 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  height: 100%;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Header row */
+.stat-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* Icon badge */
+.stat-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(124, 77, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7c4dff;
+  font-size: 14px;
+}
+
+/* Title */
+.stat-title {
+  font-size: 13px;
+  color: #8b8fa3;
+  font-weight: 500;
+}
+
+/* Value + delta row */
+.stat-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+/* Main value */
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1;
+}
+
+/* Sub text (change indicator) */
+.stat-sub {
+  font-size: 12px;
+  color: #6fcf97; /* green positive */
+  font-weight: 500;
+}

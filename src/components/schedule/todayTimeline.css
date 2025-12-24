@@ -1,0 +1,117 @@
+/* ===============================
+   Today Timeline
+   =============================== */
+
+.timeline-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+.timeline {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Item */
+.timeline-item {
+  display: flex;
+  gap: 14px;
+  /* cursor: grab; */
+  user-select: none;
+}
+
+.timeline-item:active {
+  cursor: grabbing;
+}
+
+/* Left spine */
+.timeline-left {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timeline-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.timeline-line {
+  width: 2px;
+  flex: 1;
+  background: #e6e7f0;
+  margin-top: 4px;
+}
+
+/* Colors */
+.timeline-item.medical .timeline-dot {
+  background: #7c4dff;
+}
+
+.timeline-item.recovery .timeline-dot {
+  background: #27ae60;
+}
+
+/* Content card */
+.timeline-content {
+  flex: 1;
+  background: #f7f8fc;
+  border-radius: 16px;
+  padding: 14px 16px;
+  transition: background 0.2s ease;
+}
+
+.timeline-item:hover .timeline-content {
+  background: rgba(124, 77, 255, 0.08);
+}
+
+/* Header */
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.time {
+  font-size: 11px;
+  color: #8b8fa3;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.drag-hint {
+  font-size: 11px;
+  color: #8b8fa3;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Title */
+.timeline-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.type-icon {
+  font-size: 14px;
+  color: #7c4dff;
+}
+
+/* Sub */
+.timeline-sub {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: #9aa0b4;
+}

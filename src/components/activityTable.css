@@ -1,0 +1,81 @@
+.activity-card {
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 22px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.04);
+}
+
+/* Header */
+.activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.activity-header h5 {
+  font-weight: 600;
+  margin: 0;
+}
+
+.activity-filter {
+  font-size: 13px;
+  color: #8b8fa3;
+  cursor: pointer;
+}
+
+/* Table wrapper */
+.activity-table {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Rows */
+.activity-row {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-size: 14px;
+  color: #1f2937;
+}
+
+.activity-row.header {
+  font-size: 12px;
+  color: #8b8fa3;
+  padding: 6px 14px;
+}
+
+/* Hover effect */
+.activity-row:not(.header):hover {
+  background: #f7f8fc;
+}
+
+/* Category */
+.category {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+
+.cat-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(124, 77, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7c4dff;
+  font-size: 13px;
+}
+
+/* Calories */
+.calory {
+  font-size: 13px;
+  color: #7c4dff;
+  font-weight: 500;
+}

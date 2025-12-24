@@ -1,0 +1,46 @@
+.history-filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+/* Chips */
+.filter-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-chips button {
+  border: none;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  background: #f1f2f8;
+  color: #555;
+  cursor: pointer;
+}
+
+.filter-chips button.active {
+  background: #7c4dff;
+  color: #fff;
+}
+
+/* Search */
+.filter-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border-radius: 999px;
+  padding: 6px 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.filter-search input {
+  border: none;
+  outline: none;
+  font-size: 12px;
+}

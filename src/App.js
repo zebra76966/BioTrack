@@ -1,24 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+import Dashboard from "./pages/dashboard";
+import { useState } from "react";
+import HeartbeatIntro from "./utils/HeartbeatIntro";
+import { motion } from "framer-motion";
 
 function App() {
+  const [showIntro, setShowIntro] = useState(true);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {showIntro && <HeartbeatIntro onComplete={() => setShowIntro(false)} />}
+      {!showIntro && (
+        <motion.div initial={{ y: -50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1.5, ease: "easeOut" }}>
+          <Dashboard />
+        </motion.div>
+      )}
+    </>
   );
 }
 

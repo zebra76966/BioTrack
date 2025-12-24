@@ -1,0 +1,109 @@
+/* ===============================
+   Notes Card
+   =============================== */
+
+.notes-card {
+  padding: 22px;
+}
+
+/* Header */
+.notes-header {
+  margin-bottom: 14px;
+}
+
+.notes-header h6 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.notes-sub {
+  font-size: 12px;
+  color: #8b8fa3;
+}
+
+/* List */
+.notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Note Item */
+.note-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  position: relative;
+  padding: 16px;
+  border-radius: 18px;
+  background: #f7f8fc;
+  transition: box-shadow 0.25s ease;
+}
+
+.note-item:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* Avatar */
+.note-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* Content */
+.note-content {
+  flex: 1;
+}
+
+.note-text {
+  font-size: 14px;
+  line-height: 1.55;
+  margin: 0 0 10px;
+  color: #2b2e3a;
+}
+
+/* Meta */
+.note-meta {
+  /* display: flex; */
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.note-author {
+  font-size: 12px;
+  color: #6f7388;
+}
+
+/* Role Badge */
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 500;
+}
+
+.role-badge.doctor {
+  background: rgba(124, 77, 255, 0.15);
+  color: #7c4dff;
+}
+
+.role-badge.coach {
+  background: rgba(39, 174, 96, 0.15);
+  color: #27ae60;
+}
+
+/* Clinic Logo */
+.clinic-logo {
+  width: 50px;
+  /* height: 32px; */
+  object-fit: contain;
+  opacity: 0.8;
+  flex-shrink: 0;
+}

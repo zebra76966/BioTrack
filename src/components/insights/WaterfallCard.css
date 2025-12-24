@@ -1,0 +1,194 @@
+/* ================================
+   Waterfall Card
+   ================================ */
+
+.waterfall-card {
+  padding: 24px;
+}
+
+/* Header */
+
+.waterfall-score {
+  font-size: 13px;
+  color: #8b8fa3;
+}
+
+/* Simulation */
+.waterfall-sim {
+  margin-top: 22px;
+  padding: 16px;
+  background: #f7f8fc;
+  border-radius: 18px;
+}
+
+.sim-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.waterfall-sim input[type="range"] {
+  width: 100%;
+  accent-color: #7c4dff;
+}
+
+.sim-result {
+  display: block;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+/* ---------- Header ---------- */
+.waterfall-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 18px;
+}
+
+.waterfall-title h6 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.waterfall-sub {
+  display: block;
+  font-size: 12px;
+  color: #8b8fa3;
+  margin-top: 2px;
+}
+
+/* Toggle */
+.waterfall-toggle {
+  display: flex;
+  gap: 6px;
+  background: #f3f4f9;
+  padding: 4px;
+  border-radius: 999px;
+}
+
+.waterfall-toggle button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 500;
+  color: #8b8fa3;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.waterfall-toggle button svg {
+  font-size: 13px;
+}
+
+.waterfall-toggle button.active {
+  background: #ffffff;
+  color: #7c4dff;
+  box-shadow: 0 6px 16px rgba(124, 77, 255, 0.25);
+}
+
+/* ---------- Chart ---------- */
+
+.waterfall-chart {
+  margin: 12px 0 18px;
+}
+
+/* ---------- Summary Chips ---------- */
+
+.waterfall-summary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.waterfall-chip {
+  background: #f7f8fc;
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.waterfall-chip .chip-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.waterfall-chip.negative .chip-icon {
+  background: rgba(235, 87, 87, 0.15);
+  color: #eb5757;
+}
+
+.waterfall-chip.positive .chip-icon {
+  background: rgba(39, 174, 96, 0.15);
+  color: #27ae60;
+}
+
+.waterfall-chip .chip-label {
+  font-size: 11px;
+  color: #8b8fa3;
+}
+
+.waterfall-chip .chip-value {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Simulation Panel */
+.waterfall-sim {
+  margin-top: 24px;
+  padding: 18px;
+  background: linear-gradient(180deg, rgba(124, 77, 255, 0.06), rgba(124, 77, 255, 0.02));
+  border-radius: 20px;
+}
+
+.sim-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.sim-sub {
+  display: block;
+  font-size: 12px;
+  color: #8b8fa3;
+}
+
+.sim-delta {
+  font-size: 13px;
+  font-weight: 600;
+  color: #7c4dff;
+}
+
+.sim-slider input[type="range"] {
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: #e4e6f2;
+  accent-color: #7c4dff;
+}
+
+.sim-result {
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.sim-result strong {
+  font-size: 18px;
+  color: #7c4dff;
+}

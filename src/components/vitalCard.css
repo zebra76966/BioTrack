@@ -1,0 +1,260 @@
+/* ---------- Vital Card ---------- */
+.vital-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 22px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.05);
+}
+.full-height {
+  min-height: 100dvh; /* 👈 exact requirement */
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.pulse-heart {
+  animation: pulse 1.6s infinite ease-in-out;
+}
+
+.vital-card.heart .info-icon {
+  background: rgba(124, 77, 255, 0.15);
+  color: #7c4dff;
+}
+
+.vital-card.muscle .info-icon {
+  background: rgba(86, 204, 157, 0.15);
+  color: #56cc9d;
+}
+
+.vital-card.testosterone .info-icon {
+  background: rgba(242, 153, 74, 0.15);
+  color: #f2994a;
+}
+
+.trend {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.trend.up {
+  color: #27ae60;
+}
+
+.trend.down {
+  color: #eb5757;
+}
+
+.insights-toggle {
+  background: none;
+  border: none;
+  color: #7c4dff;
+  font-size: 13px;
+  cursor: pointer;
+  margin-bottom: 8px;
+  align-self: flex-start;
+}
+
+.insights-drawer {
+  background: #f7f8fc;
+  border-radius: 14px;
+  padding: 14px;
+  font-size: 13px;
+  color: #4b5563;
+  margin-bottom: 12px;
+}
+
+.vital-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 14px 0 18px;
+}
+
+.info-chip {
+  background: #f7f8fc;
+  border-radius: 14px;
+  padding: 10px 12px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.info-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(124, 77, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7c4dff;
+  font-size: 13px;
+}
+
+.info-label {
+  font-size: 11px;
+  color: #8b8fa3;
+}
+
+.info-value {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.info-value span {
+  font-size: 11px;
+  margin-left: 2px;
+  color: #8b8fa3;
+}
+
+/* Header */
+.vital-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.vital-header h5 {
+  font-weight: 600;
+}
+
+/* Switch menu */
+.vital-switch {
+  position: relative;
+  cursor: pointer;
+}
+
+.vital-switch svg {
+  font-size: 20px;
+  color: #8b8fa3;
+}
+
+/* Menu button */
+.menu-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #8b8fa3;
+  font-size: 20px;
+}
+
+/* Dropdown */
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background: #f3f4fa;
+}
+
+.menu-icon {
+  color: #7c4dff;
+  font-size: 14px;
+}
+
+.vital-menu {
+  position: absolute;
+  right: 0;
+  top: 120%;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  padding: 6px 0;
+  width: 180px;
+  z-index: 10;
+}
+
+.vital-switch:hover .vital-menu {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.vital-menu div {
+  padding: 10px 14px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.vital-menu div:hover {
+  background: #f3f4fa;
+}
+
+/* Visual */
+.vital-visual {
+  position: relative;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.vital-visual img {
+  width: 300px;
+  z-index: 2;
+}
+
+.ring {
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.ring-2 {
+  width: 300px;
+  height: 300px;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* Stats row */
+.vital-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.vital-stat .label {
+  font-size: 12px;
+  color: #8b8fa3;
+}
+
+.vital-stat strong {
+  font-size: 20px;
+}
+
+.vital-stat span {
+  font-size: 11px;
+  margin-left: 4px;
+  color: #8b8fa3;
+}
+
+/* Chart header */
+.vital-chart-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.muted {
+  color: #8b8fa3;
+}

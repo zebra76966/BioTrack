@@ -1,0 +1,128 @@
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 998;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 30dvw;
+  height: 100vh;
+  background: #fff;
+  border-radius: 1em 0 0 1em;
+  z-index: 999;
+  padding: 50px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.drawer-header button {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Meta */
+.drawer-meta {
+  display: flex;
+  gap: 14px;
+  font-size: 12px;
+  color: #8b8fa3;
+  margin: 12px 0 18px;
+}
+
+/* Content */
+.drawer-content h6 {
+  margin-top: 12px;
+}
+
+.drawer-content p {
+  font-size: 13px;
+}
+
+/* Actions */
+.drawer-actions {
+  margin-top: auto;
+}
+
+.drawer-actions .primary-btn {
+  width: 100%;
+}
+
+/* Title */
+.drawer-title {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.drawer-title strong {
+  display: block;
+}
+
+.drawer-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drawer-icon.labs {
+  background: rgba(242, 153, 74, 0.2);
+  color: #f2994a;
+}
+
+.drawer-icon.medical {
+  background: rgba(124, 77, 255, 0.2);
+  color: #7c4dff;
+}
+
+.drawer-icon.recovery {
+  background: rgba(39, 174, 96, 0.2);
+  color: #27ae60;
+}
+
+/* Meta chips */
+.drawer-meta-chips {
+  display: flex;
+  gap: 10px;
+  margin: 14px 0 20px;
+  font-size: 12px;
+}
+
+.drawer-meta-chips span {
+  background: #f1f2f8;
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+/* Mini chart */
+.drawer-chart {
+  background: #f7f8fc;
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 18px;
+}
+
+.mini-chart {
+  height: 120px;
+  margin: 8px 0;
+}
+
+/* Section */
+.drawer-section h6 {
+  margin-bottom: 6px;
+}

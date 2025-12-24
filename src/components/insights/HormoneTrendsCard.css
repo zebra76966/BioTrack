@@ -1,0 +1,61 @@
+/* ===============================
+   Hormone Trends Card
+   =============================== */
+
+.hormone-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 22px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  margin-bottom: 24px;
+}
+
+/* Header */
+.hormone-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.hormone-header h6 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.hormone-toggle {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.hormone-toggle button {
+  font-size: 11px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: none;
+  background: #f1f2f8;
+  color: #6f7388;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.hormone-toggle button.active {
+  background: rgba(124, 77, 255, 0.15);
+  color: #7c4dff;
+  font-weight: 500;
+}
+
+.hormone-toggle button:hover {
+  transform: translateY(-1px);
+}
+
+/* Chart */
+.hormone-chart {
+  height: 240px;
+  margin-top: 10px;
+}
+
+canvas {
+  cursor: crosshair;
+}

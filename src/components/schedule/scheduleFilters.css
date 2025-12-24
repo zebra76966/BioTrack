@@ -1,0 +1,20 @@
+.schedule-filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.schedule-filters button {
+  border: none;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  background: #f1f2f8;
+  color: #555;
+  cursor: pointer;
+}
+
+.schedule-filters button.active {
+  background: #7c4dff;
+  color: #fff;
+}
