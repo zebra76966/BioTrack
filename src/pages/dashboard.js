@@ -14,6 +14,7 @@ import InsightsPage from "./InsightsPage";
 import SchedulePage from "./SchedulePage";
 import HistoryPage from "./HistoryPage";
 import ActivityPage from "./ActivityPage";
+import DeviceConnections from "../components/devices/DeviceConnections";
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("Dashboard");
@@ -142,6 +143,11 @@ export default function Dashboard() {
         {activeTab === "Activity" && (
           <div className="insights-wrapper">
             <ActivityPage />
+          </div>
+        )}
+        {activeTab === "Devices" && (
+          <div className="insights-wrapper">
+            <DeviceConnections />
           </div>
         )}
       </div>
