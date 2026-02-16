@@ -48,13 +48,22 @@ const activityData = [
   },
 ];
 
-export default function ActivityTimeline() {
+export default function ActivityTimeline({ data = [] }) {
+  if (!data.length) {
+    return (
+      <motion.div className="activity-timeline-card">
+        <h6>Activity Timeline</h6>
+        <p className="muted">No workout sessions yet</p>
+      </motion.div>
+    );
+  }
+
   return (
     <motion.div className="activity-timeline-card" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}>
       <h6>Activity Timeline</h6>
 
       <div className="activity-timeline">
-        {activityData.map((group, i) => (
+        {data.map((group, i) => (
           <div key={i} className="activity-group">
             <span className="activity-date">{group.label}</span>
 
@@ -70,10 +79,17 @@ export default function ActivityTimeline() {
 
 /* ---------------- Item ---------------- */
 
-function ActivityItem({ title, time, duration, intensity, icon, type }) {
+function ActivityItem({ title, time, duration, intensity, type }) {
+  const iconMap = {
+    walk: <FaWalking />,
+    workout: <FaDumbbell />,
+    recovery: <FaHeartbeat />,
+    sleep: <FaBed />,
+  };
+
   return (
     <motion.div className={`activity-item ${type}`} whileHover={{ scale: 1.015 }} transition={{ type: "spring", stiffness: 300 }}>
-      <div className="activity-icon">{icon}</div>
+      <div className="activity-icon">{iconMap[type] || <FaWalking />}</div>
 
       <div className="activity-info">
         <strong>{title}</strong>

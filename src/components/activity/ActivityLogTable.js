@@ -4,49 +4,25 @@ import { FaWalking, FaDumbbell, FaHeartbeat, FaBed } from "react-icons/fa";
 import "./activityLogTable.css";
 
 /* Dummy activity log data */
-const activityLogs = [
-  {
-    type: "walk",
-    activity: "Morning Walk",
-    date: "Apr 22, 2024",
-    duration: "25 min",
-    intensity: "Light",
-    calories: 110,
-  },
-  {
-    type: "workout",
-    activity: "Strength Training",
-    date: "Apr 22, 2024",
-    duration: "45 min",
-    intensity: "High",
-    calories: 280,
-  },
-  {
-    type: "recovery",
-    activity: "Recovery Session",
-    date: "Apr 21, 2024",
-    duration: "30 min",
-    intensity: "Moderate",
-    calories: 90,
-  },
-  {
-    type: "sleep",
-    activity: "Sleep",
-    date: "Apr 21, 2024",
-    duration: "7h 40m",
-    intensity: "Rest",
-    calories: "--",
-  },
-];
 
-const typeIcon = {
-  walk: <FaWalking />,
-  workout: <FaDumbbell />,
-  recovery: <FaHeartbeat />,
-  sleep: <FaBed />,
-};
+export default function ActivityLogTable({ data = [] }) {
+  if (!data.length) {
+    return (
+      <motion.div className="activity-log-card">
+        <h6>Activity Log</h6>
+        <p className="muted">No activity sessions recorded</p>
+      </motion.div>
+    );
+  }
 
-export default function ActivityLogTable() {
+  const typeIcon = {
+    Walking: <FaWalking />,
+    Running: <FaWalking />,
+    Cycling: <FaWalking />,
+    "Strength Training": <FaDumbbell />,
+    Workout: <FaDumbbell />,
+  };
+
   return (
     <motion.div className="activity-log-card" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}>
       <h6>Activity Log</h6>
@@ -58,25 +34,27 @@ export default function ActivityLogTable() {
             <th>Date</th>
             <th>Duration</th>
             <th>Intensity</th>
-            <th>Calories</th>
           </tr>
         </thead>
 
         <tbody>
-          {activityLogs.map((a, i) => (
-            <tr key={i}>
-              <td className="activity-cell">
-                <span className={`activity-icon ${a.type}`}>{typeIcon[a.type]}</span>
-                <span className="activity-title">{a.activity}</span>
-              </td>
-              <td>{a.date}</td>
-              <td>{a.duration}</td>
-              <td>
-                <span className={`intensity-chip ${a.intensity.toLowerCase()}`}>{a.intensity}</span>
-              </td>
-              <td>{a.calories}</td>
-            </tr>
-          ))}
+          {data.map((s, i) => {
+            const intensity = s.duration_minutes > 45 ? "High" : s.duration_minutes > 25 ? "Moderate" : "Light";
+
+            return (
+              <tr key={i}>
+                <td className="activity-cell">
+                  <span className="activity-icon">{typeIcon[s.activity_type] || <FaWalking />}</span>
+                  <span className="activity-title">{s.activity_type}</span>
+                </td>
+                <td>{new Date(s.start_time).toLocaleDateString()}</td>
+                <td>{s.duration_minutes} min</td>
+                <td>
+                  <span className={`intensity-chip ${intensity.toLowerCase()}`}>{intensity}</span>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </Table>
     </motion.div>

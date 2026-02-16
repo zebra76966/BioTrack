@@ -8,37 +8,28 @@ import { Chart as ChartJS, LineElement, PointElement, CategoryScale, LinearScale
 
 ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Filler);
 
-const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+export default function ActivityTrendsCard({ data }) {
+  const labels = data.map((d) => new Date(d.date).toLocaleDateString("en-US", { weekday: "short" }));
 
-/* Dummy trend data */
-const trends = {
-  steps: {
-    label: "Steps",
-    unit: "steps",
-    icon: <FaWalking />,
-    color: "#27ae60",
-    gradient: ["rgba(39,174,96,0.35)", "rgba(39,174,96,0.05)"],
-    data: [6200, 7100, 6800, 7400, 8200, 9000, 8420],
-  },
-  calories: {
-    label: "Calories",
-    unit: "kcal",
-    icon: <FaFire />,
-    color: "#eb5757",
-    gradient: ["rgba(235,87,87,0.35)", "rgba(235,87,87,0.05)"],
-    data: [420, 480, 450, 500, 520, 610, 540],
-  },
-  minutes: {
-    label: "Active Minutes",
-    unit: "min",
-    icon: <FaClock />,
-    color: "#7c4dff",
-    gradient: ["rgba(124,77,255,0.35)", "rgba(124,77,255,0.05)"],
-    data: [42, 55, 48, 60, 65, 80, 74],
-  },
-};
+  const trends = {
+    steps: {
+      label: "Steps",
+      unit: "steps",
+      icon: <FaWalking />,
+      color: "#27ae60",
+      gradient: ["rgba(39,174,96,0.35)", "rgba(39,174,96,0.05)"],
+      data: data.map((d) => d.steps),
+    },
+    calories: {
+      label: "Calories",
+      unit: "kcal",
+      icon: <FaFire />,
+      color: "#eb5757",
+      gradient: ["rgba(235,87,87,0.35)", "rgba(235,87,87,0.05)"],
+      data: data.map((d) => Math.round(d.calories)),
+    },
+  };
 
-export default function ActivityTrendsCard() {
   const [active, setActive] = useState("calories");
 
   const getStats = (data) => {

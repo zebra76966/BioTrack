@@ -1,19 +1,19 @@
 import { Container, Row, Col, Button, Modal, Form } from "react-bootstrap";
 import { motion, AnimatePresence, delay } from "framer-motion";
 import { useState } from "react";
-import { SiGooglefit, SiFitbit, SiGarmin } from "react-icons/si";
+import { SiGooglefit, SiFitbit, SiGarmin, SiSamsung } from "react-icons/si";
 
 import toast from "react-hot-toast";
 import "./DeviceConnections.css";
 import { Toaster } from "react-hot-toast";
 
-import { FaHeartbeat, FaPlus, FaApple } from "react-icons/fa";
+import { FaHeartbeat, FaPlus, FaApple, FaMobileAlt, FaWatchmanMonitoring } from "react-icons/fa";
 import api from "../../auth/api";
 import { useEffect } from "react";
 
 const devicesList = [
   { id: "googlefit", name: "Google Fit", icon: SiGooglefit, color: "#4285F4" },
-  { id: "fitbit", name: "Fitbit", icon: SiFitbit, color: "#00B0B9" },
+  // { id: "fitbit", name: "Fitbit", icon: SiFitbit, color: "#00B0B9" },
   { id: "garmin", name: "Garmin", icon: SiGarmin, color: "#000000" },
   { id: "oura", name: "Oura Ring", type: "text", label: "OURA", color: "#111827" },
   { id: "glucose", name: "Glucose Monitor", icon: FaHeartbeat, color: "#ef4444" },
@@ -122,6 +122,26 @@ export default function DeviceConnections() {
 
   const [showModal, setShowModal] = useState(false);
   const [search, setSearch] = useState("");
+  const AnimatedSourceIcon = ({ children, delay = 0, label }) => {
+    return (
+      <motion.div
+        title={label}
+        animate={{
+          scale: [1, 1.7, 1],
+          opacity: [0.6, 1, 0.6],
+        }}
+        transition={{
+          duration: 2.8,
+          ease: "easeInOut",
+          repeat: Infinity,
+          repeatDelay: 1,
+          delay,
+        }}
+      >
+        {children}
+      </motion.div>
+    );
+  };
 
   return (
     <motion.div className="mt-4 container-fluid px-5" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}>
@@ -132,7 +152,7 @@ export default function DeviceConnections() {
         <Row>
           {devices.map((device) => (
             <Col md={6} lg={4} key={device.id} className="mb-4">
-              <motion.div className={`device-card ${device.status}`} whileHover={{ y: -6 }} animate={device.status === "connected" ? { scale: [1, 1.03, 1] } : {}} transition={{ duration: 0.4 }}>
+              <motion.div className={`device-card h-100 ${device.status}`} whileHover={{ y: -6 }} animate={device.status === "connected" ? { scale: [1, 1.03, 1] } : {}} transition={{ duration: 0.4 }}>
                 {/* Confetti */}
                 <AnimatePresence>
                   {device.status === "connected" && <motion.div className="confetti" initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} />}
@@ -152,26 +172,50 @@ export default function DeviceConnections() {
                 </div>
 
                 <h5>{device.name}</h5>
+                {device.id === "googlefit" && device.status === "connected" && (
+                  <motion.div className="connected-sources mt-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                    {/* <span className="source-label">Sources</span> */}
 
-                {device.status === "disconnected" && (
-                  <Button className="connect-btn" onClick={() => connectDevice(device.id)}>
-                    Connect
-                  </Button>
+                    <div className="source-icons animated">
+                      <AnimatedSourceIcon delay={0} label="Google Fit">
+                        <SiSamsung className="source-icon google" />
+                      </AnimatedSourceIcon>
+
+                      <AnimatedSourceIcon delay={1} label="Fitbit">
+                        <SiFitbit className="source-icon fitbit" />
+                      </AnimatedSourceIcon>
+
+                      <AnimatedSourceIcon delay={2} label="Phone">
+                        <FaMobileAlt className="source-icon phone" />
+                      </AnimatedSourceIcon>
+
+                      <AnimatedSourceIcon delay={3} label="Wear OS">
+                        <FaWatchmanMonitoring className="source-icon wearos" />
+                      </AnimatedSourceIcon>
+                    </div>
+                  </motion.div>
                 )}
-
-                {device.status === "connecting" && <span className="connecting-text">Connecting…</span>}
-
-                {device.status === "connected" && (
-                  <div className="d-flex justify-content-center align-items-center gap-2 mt-4">
-                    <Button className="sync-btn mb-0" size="sm" onClick={syncGoogleFit}>
-                      Sync Now
+                <div className="mt-4">
+                  {device.status === "disconnected" && (
+                    <Button className="connect-btn" onClick={() => connectDevice(device.id)}>
+                      Connect
                     </Button>
+                  )}
 
-                    <Button variant="danger" className="connect-btn rounded-2 bg-warning " onClick={disconnectGoogleFit}>
-                      Disconnect
-                    </Button>
-                  </div>
-                )}
+                  {device.status === "connecting" && <span className="connecting-text">Connecting…</span>}
+
+                  {device.status === "connected" && (
+                    <div className="d-flex justify-content-center align-items-center gap-2 mt-4">
+                      <Button className="sync-btn mb-0" size="sm" onClick={syncGoogleFit}>
+                        Sync Now
+                      </Button>
+
+                      <Button variant="danger" className="connect-btn rounded-2 bg-warning " onClick={disconnectGoogleFit}>
+                        Disconnect
+                      </Button>
+                    </div>
+                  )}
+                </div>
               </motion.div>
             </Col>
           ))}

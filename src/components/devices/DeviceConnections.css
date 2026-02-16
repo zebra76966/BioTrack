@@ -166,3 +166,67 @@
 .search-device-item span {
   font-weight: 500;
 }
+
+.connected-sources {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.source-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #9ca3af;
+}
+
+.source-icons {
+  display: flex;
+  gap: 10px;
+}
+.source-icons.animated {
+  display: flex;
+  gap: 14px;
+}
+
+.source-icon {
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+  border-radius: 50%;
+  background: #f4f5ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  color: #9ca3af;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* Brand colors */
+.source-icon.google {
+  color: #4285f4;
+}
+
+.source-icon.fitbit {
+  color: #00b0b9;
+}
+
+.source-icon.phone {
+  color: #6366f1;
+}
+
+.source-icon.wearos {
+  color: #10b981;
+}
+
+.icon-wrapper {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #f4f5ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+}

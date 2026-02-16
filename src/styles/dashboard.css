@@ -58,7 +58,9 @@
   padding: 22px;
   border: none;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .stat-card:hover,
@@ -144,4 +146,47 @@
 
 .table td {
   font-size: 14px;
+}
+
+.range-toggle {
+  display: flex;
+  background: #f4f5ff;
+  border-radius: 999px;
+  padding: 4px;
+}
+
+.toggle-btn {
+  border: none;
+  background: transparent;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+  transition: all 0.2s ease;
+}
+
+.toggle-btn.active {
+  background: linear-gradient(135deg, #7c3aed, #6366f1);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.35);
+}
+
+.sync-activity-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: #fff;
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #4f46e5;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.sync-activity-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
