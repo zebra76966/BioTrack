@@ -33,3 +33,128 @@
   display: block;
   margin-bottom: 4px;
 }
+
+.mode-toggle {
+  display: flex;
+  gap: 6px;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 12px;
+}
+
+.mode-toggle .toggle-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.mode-toggle .toggle-btn.active {
+  background: #7c3aed;
+  color: white;
+}
+
+.priority-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 18px;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f1f5f9;
+}
+
+.priority-header h6 {
+  color: #111827;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.priority-header span {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.priority-grid {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.priority-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.priority-item label {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 6px;
+}
+
+.priority-item select {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: #111827;
+  transition: all 0.2s ease;
+}
+
+.priority-item select:focus {
+  outline: none;
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.15);
+}
+
+.priority-info {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.top-nav-select {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  outline: none;
+}
+
+.top-nav-select:hover {
+  border-color: #7c3aed;
+}
+
+.activity-icon-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.source-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  background: #fff; /* Use #000 if your theme is dark */
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  color: #555;
+  border: 1px solid #eee;
+}
+
+.source-text {
+  font-size: 0.7rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}

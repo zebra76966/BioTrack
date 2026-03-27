@@ -1,6 +1,10 @@
 import { motion } from "framer-motion";
 import { FaWalking, FaDumbbell, FaBed, FaHeartbeat } from "react-icons/fa";
+import { FaApple } from "react-icons/fa";
+import { SiGooglefit } from "react-icons/si";
+
 import "./activityTimeline.css";
+import { getActivityConfig } from "../../utils/icons";
 
 /* Dummy activity data */
 const activityData = [
@@ -62,7 +66,7 @@ export default function ActivityTimeline({ data = [] }) {
     <motion.div className="activity-timeline-card" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}>
       <h6>Activity Timeline</h6>
 
-      <div className="activity-timeline">
+      <div className="activity-timeline noScroll">
         {data.map((group, i) => (
           <div key={i} className="activity-group">
             <span className="activity-date">{group.label}</span>
@@ -79,7 +83,7 @@ export default function ActivityTimeline({ data = [] }) {
 
 /* ---------------- Item ---------------- */
 
-function ActivityItem({ title, time, duration, intensity, type }) {
+function ActivityItem({ title, time, duration, intensity, type, source }) {
   const iconMap = {
     walk: <FaWalking />,
     workout: <FaDumbbell />,
@@ -87,9 +91,16 @@ function ActivityItem({ title, time, duration, intensity, type }) {
     sleep: <FaBed />,
   };
 
+  const config = getActivityConfig(title);
+
   return (
-    <motion.div className={`activity-item ${type}`} whileHover={{ scale: 1.015 }} transition={{ type: "spring", stiffness: 300 }}>
-      <div className="activity-icon">{iconMap[type] || <FaWalking />}</div>
+    <motion.div className={`activity-item ${type} `} whileHover={{ scale: 1.015 }} transition={{ type: "spring", stiffness: 300 }}>
+      {/* <div className={`activity-icon ${intensity.toLowerCase()}`}>{config.icon}</div> */}
+
+      <div className="activity-icon-wrapper">
+        <div className={`activity-icon ${intensity.toLowerCase()}`}>{config.icon}</div>
+        <div className="source-badge">{source === "apple_health" ? <FaApple /> : <SiGooglefit />}</div>
+      </div>
 
       <div className="activity-info">
         <strong>{title}</strong>

@@ -5,7 +5,7 @@ import { toast } from "react-hot-toast";
 import { useAuth } from "../auth/AuthContext";
 import "./topTabs.css";
 
-const tabs = ["Dashboard", "Insights", "Schedule", "History", "Activity", "Devices"];
+const tabs = ["Dashboard", "Insights", "Schedule", "History", "Activity", "Devices", "Blueprints"];
 
 export default function TopTabs({ active, setActive }) {
   const { user, logout } = useAuth();

@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { Line } from "react-chartjs-2";
 import { motion } from "framer-motion";
+import { useSimulation } from "../../utils/SimulationContext";
 import { hormoneTrends } from "../../data/hormoneTrendsData";
 import "./HormoneTrendsCard.css";
 
@@ -11,48 +12,66 @@ ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, Tooltip,
 const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
 
 export default function HormoneTrendsCard() {
+  const { simulatedMarkers } = useSimulation();
   const [active, setActive] = useState("all");
 
   const chartData = useMemo(() => {
-    // ALL MODE
+    // Helper to inject simulation data into the "Jul" (last) index
+    const getProcessedData = (key, h) => {
+      const marker = simulatedMarkers.find((m) => m.id === key);
+      const liveValue = marker ? marker.value : h.data[6];
+
+      // If we are in "all" mode, we use normalized values (0-100) to keep scales consistent
+      if (active === "all") {
+        const normalizedLive = marker ? ((liveValue - marker.min) / (marker.max - marker.min)) * 100 : h.normalized[6];
+        return [...h.normalized.slice(0, 6), normalizedLive];
+      }
+
+      // If in single mode, use actual units
+      return [...h.data.slice(0, 6), liveValue];
+    };
+
+    // --- ALL MODE ---
     if (active === "all") {
       return {
         labels,
-        datasets: Object.values(hormoneTrends).map((h) => ({
-          label: h.label,
-          data: h.normalized,
-          borderColor: h.color,
-          borderWidth: 2.5,
-          tension: 0.45,
-          fill: true,
-          pointRadius: 0,
-          pointHoverRadius: 6,
-          pointBackgroundColor: "#fff",
-          pointBorderColor: h.color,
-          backgroundColor: (ctx) => {
-            const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 260);
-            gradient.addColorStop(0, h.gradient[0]);
-            gradient.addColorStop(1, h.gradient[1]);
-            return gradient;
-          },
-        })),
+        datasets: Object.keys(hormoneTrends).map((key) => {
+          const h = hormoneTrends[key];
+          return {
+            label: h.label,
+            data: getProcessedData(key, h),
+            borderColor: h.color,
+            borderWidth: 2.5,
+            tension: 0.45,
+            fill: true,
+            pointRadius: (ctx) => (ctx.dataIndex === 6 ? 6 : 0), // Highlight the live point
+            pointHoverRadius: 6,
+            pointBackgroundColor: "#fff",
+            pointBorderColor: h.color,
+            backgroundColor: (ctx) => {
+              const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 260);
+              gradient.addColorStop(0, h.gradient[0]);
+              gradient.addColorStop(1, h.gradient[1]);
+              return gradient;
+            },
+          };
+        }),
       };
     }
 
-    // 🔹 SINGLE MODE
+    // --- SINGLE MODE ---
     const h = hormoneTrends[active];
-
     return {
       labels,
       datasets: [
         {
           label: h.label,
-          data: h.data,
+          data: getProcessedData(active, h),
           borderColor: h.color,
           borderWidth: 3,
           tension: 0.45,
           fill: true,
-          pointRadius: 0,
+          pointRadius: (ctx) => (ctx.dataIndex === 6 ? 8 : 0),
           pointHoverRadius: 7,
           pointBackgroundColor: "#fff",
           pointBorderWidth: 3,
@@ -66,7 +85,7 @@ export default function HormoneTrendsCard() {
         },
       ],
     };
-  }, [active]);
+  }, [active, simulatedMarkers]);
 
   return (
     <motion.div className="hormone-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
@@ -113,7 +132,11 @@ export default function HormoneTrendsCard() {
                 padding: 10,
                 displayColors: false,
                 callbacks: {
-                  label: (ctx) => `${ctx.dataset.label}: ${ctx.formattedValue}`,
+                  label: (ctx) => {
+                    const val = ctx.raw;
+                    const suffix = active === "all" ? "%" : ` ${hormoneTrends[active].unit}`;
+                    return `${ctx.dataset.label}: ${val}${suffix}`;
+                  },
                 },
               },
             },

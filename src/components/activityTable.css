@@ -31,6 +31,24 @@
   gap: 6px;
 }
 
+.activity-table {
+  max-height: 500px !important;
+  overflow-y: auto;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+.noScroll::-webkit-scrollbar {
+  width: 5px;
+
+  background-color: #f7f8fc;
+}
+.noScroll::-webkit-scrollbar-thumb {
+  background-color: #7c4dff;
+  border-radius: 5px;
+  width: 5px;
+}
+
 /* Rows */
 .activity-row {
   display: grid;

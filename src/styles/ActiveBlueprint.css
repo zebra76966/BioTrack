@@ -1,0 +1,589 @@
+.blueprint-container {
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.blueprint-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  border-left: 5px solid #6366f1;
+  padding-left: 1.5rem;
+}
+
+.status-badge-alt {
+  background: #f0fdf4;
+  color: #16a34a;
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.blueprint-timeline {
+  position: relative;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 2rem;
+}
+
+.timeline-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.marker-node {
+  width: 16px;
+  height: 16px;
+  background: #6366f1;
+  border: 4px solid #e0e7ff;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.marker-line {
+  flex-grow: 1;
+  width: 2px;
+  background: #e5e7eb;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.timeline-item:last-child .marker-line {
+  display: none;
+}
+
+.timeline-content {
+  flex-grow: 1;
+  border-radius: 16px !important;
+  background: white;
+  transition: transform 0.3s ease;
+}
+
+.timeline-content:hover {
+  transform: translateY(-5px);
+}
+
+.section-heading {
+  color: #1f2937;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.action-card {
+  background: #f8fafc;
+  padding: 12px 16px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid transparent;
+  transition: 0.2s;
+}
+
+.action-card:hover {
+  background: white;
+  border-color: #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.action-dot {
+  min-width: 8px;
+  height: 8px;
+  background: #a5b4fc;
+  border-radius: 50%;
+}
+
+.action-text {
+  color: #4b5563;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.no-plan-state {
+  text-align: center;
+  padding: 5rem;
+  color: #94a3b8;
+}
+
+.blueprint-page-wrapper {
+  display: flex;
+  gap: 30px;
+  padding: 30px;
+  max-width: 1400px;
+  margin: 0 auto;
+  align-items: flex-start;
+}
+
+/* Sidebar Styling */
+.blueprint-sidebar {
+  width: 320px;
+  position: sticky;
+  top: 30px;
+  height: fit-content;
+}
+
+.sidebar-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #8b5cf6;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+.suggestion-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.status-card {
+  background: white;
+  padding: 16px;
+  border-radius: 16px;
+  display: flex;
+  gap: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f1f5f9;
+}
+
+.status-card.danger {
+  border-left: 4px solid #ef4444;
+}
+.status-card.success {
+  border-left: 4px solid #10b981;
+}
+.status-card.warning {
+  border-left: 4px solid #f59e0b;
+}
+
+.status-icon {
+  font-size: 1.2rem;
+  color: #64748b;
+  margin-top: 3px;
+}
+
+.status-label {
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+  color: #1e293b;
+}
+
+.status-message {
+  font-size: 0.8rem;
+  color: #64748b;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.status-action {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #8b5cf6;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Main Content Adjustments */
+.blueprint-main-content {
+  flex: 1;
+}
+
+@media (max-width: 992px) {
+  .blueprint-page-wrapper {
+    flex-direction: column;
+  }
+  .blueprint-sidebar {
+    width: 100%;
+    position: static;
+  }
+}
+
+.blueprint-page-container {
+  padding: 20px 40px;
+  background: #fdfdff;
+  min-height: 100vh;
+}
+
+/* Pulse Bar Styling */
+.pulse-bar-wrapper {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 15px 25px;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.08);
+  margin-bottom: 40px;
+  border: 1px solid #f0f0f5;
+}
+
+.pulse-header {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #6366f1;
+  letter-spacing: 1.5px;
+  margin-bottom: 12px;
+}
+
+.pulse-scroll-container {
+  overflow-x: auto;
+  padding: 5px 0 15px 0;
+  scrollbar-width: none; /* Firefox */
+}
+.pulse-scroll-container::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Edge */
+}
+
+.pulse-row {
+  display: flex;
+  gap: 16px;
+  /* Allow the cards to determine width but prevent them from being infinite */
+  align-items: stretch;
+}
+.pulse-card {
+  display: flex;
+  align-items: flex-start; /* Align to top for multi-line text */
+  gap: 12px;
+  background: #f8fafc;
+  padding: 14px 20px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  /* Key fix: prevent cards from becoming massive and allow text wrap */
+  max-width: 450px;
+  min-width: 300px;
+  flex-shrink: 0;
+}
+
+.pulse-card.danger {
+  background: #fff1f2;
+  border-color: #fecdd3;
+}
+.pulse-card.success {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+.pulse-card.warning {
+  background: #fffbeb;
+  border-color: #fef3c7;
+}
+
+.pulse-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+.pulse-indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+.pulse-indicator-dot.danger {
+  background: #ef4444;
+}
+.pulse-indicator-dot.success {
+  background: #22c55e;
+}
+.pulse-indicator-dot.warning {
+  background: #f59e0b;
+}
+
+.pulse-label {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #1e293b;
+  margin-right: 5px;
+}
+.pulse-msg {
+  font-size: 0.82rem;
+  color: #64748b;
+  line-height: 1.4;
+  /* Allows text to wrap nicely in the card */
+  white-space: normal;
+}
+.pulse-cta {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #6366f1;
+  cursor: pointer;
+  white-space: nowrap;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Timeline Refinements */
+.blueprint-header-v2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.header-meta {
+  display: flex;
+  gap: 15px;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  margin-top: 5px;
+}
+
+.status-pill {
+  background: #6366f1;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.timeline-content-card {
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 18px;
+
+  width: 100%;
+}
+
+.section-title {
+  font-weight: 800;
+  color: #1e293b;
+  font-size: 1.1rem;
+}
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+.step-item:hover {
+  background: #f1f5f9;
+}
+.step-bullet {
+  width: 6px;
+  height: 6px;
+  background: #cbd5e1;
+  border-radius: 50%;
+}
+.step-text {
+  color: #475569;
+  font-size: 0.95rem;
+}
+
+.main-title {
+  font-size: 1.75rem;
+  font-weight: 850;
+  color: #1e293b;
+  letter-spacing: -0.5px;
+}
+.meta-divider {
+  margin: 0 10px;
+  color: #e2e8f0;
+}
+
+/* Enhanced Pulse Cards */
+.pulse-card-v2 {
+  display: flex;
+  gap: 16px;
+  background: white;
+  padding: 18px;
+  border-radius: 20px;
+  border: 1px solid #f1f5f9;
+  min-width: 380px;
+  max-width: 420px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: transform 0.2s ease;
+}
+
+.pulse-card-v2:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.pulse-icon-box {
+  min-width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.pulse-icon-box.success {
+  background: #f0fdf4;
+  color: #22c55e;
+}
+.pulse-icon-box.danger {
+  background: #fff1f2;
+  color: #ef4444;
+}
+.pulse-icon-box.warning {
+  background: #fffbeb;
+  color: #f59e0b;
+}
+
+.pulse-top-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.pulse-status-tag {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.pulse-suggestion-tip {
+  margin-top: 12px;
+  font-size: 0.75rem;
+  color: #6366f1;
+  background: #f5f3ff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.tip-label {
+  font-weight: 800;
+  margin-right: 4px;
+}
+
+/* Pulse Header Animation */
+.pulse-animate {
+  animation: pulse-ring 2s infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Hide scrollbar but keep functionality */
+.pulse-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+.pulse-scroll-container {
+  scrollbar-width: none;
+}
+
+.pulse-meta-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.trend-icon {
+  font-size: 0.9rem;
+}
+
+.trend-icon.up {
+  color: #22c55e;
+} /* Green for improvement */
+.trend-icon.down {
+  color: #ef4444;
+} /* Red for decline */
+.trend-icon.stable {
+  color: #94a3b8;
+} /* Grey for no change */
+
+.pulse-card-v2 {
+  border-bottom: 3px solid transparent;
+}
+
+/* Subtle accent bottom border based on status */
+.pulse-card-v2.success {
+  border-bottom-color: #22c55e;
+}
+.pulse-card-v2.danger {
+  border-bottom-color: #ef4444;
+}
+.pulse-card-v2.warning {
+  border-bottom-color: #f59e0b;
+}
+
+/* Dynamic Status Tags */
+.pulse-status-tag {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+}
+
+/* Specific Tag Coloring */
+.pulse-status-tag.status-success {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+.pulse-status-tag.status-warning {
+  background: #fffbeb;
+  color: #d97706;
+}
+
+.pulse-status-tag.status-danger {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+/* Card Accent Borders */
+.pulse-card-v2.danger {
+  border-left: 4px solid #ef4444;
+}
+
+.pulse-card-v2.warning {
+  border-left: 4px solid #f59e0b;
+}
+
+.pulse-card-v2.success {
+  border-left: 4px solid #10b981;
+}
+
+/* Refined Protocol Tip based on type */
+.pulse-card-v2.danger .pulse-suggestion-tip {
+  background: #fff1f2;
+  color: #9f1239;
+}
+
+.pulse-card-v2.warning .pulse-suggestion-tip {
+  background: #fffbeb;
+  color: #92400e;
+}

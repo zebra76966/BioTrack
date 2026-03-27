@@ -1,97 +1,58 @@
-import { FaWalking, FaRunning, FaBiking, FaSwimmer, FaSpa } from "react-icons/fa";
-import { useActivityHistory } from "../hooks/useActivityHistory";
+import { FaApple } from "react-icons/fa";
+import { SiGooglefit } from "react-icons/si";
+import { getActivityConfig } from "../utils/icons";
 import "./activityTable.css";
 
-/**
- * Activity type config
- * Later, when you add real activity segments,
- * just change activity_type from "daily" → "running", etc.
- */
-const ACTIVITY_CONFIG = {
-  daily: { label: "Daily Activity", icon: FaWalking },
-  walking: { label: "Walking", icon: FaWalking },
-  running: { label: "Running", icon: FaRunning },
-  cycling: { label: "Cycling", icon: FaBiking },
-  swimming: { label: "Swimming", icon: FaSwimmer },
-  yoga: { label: "Yoga", icon: FaSpa },
-};
+export default function ActivityTable({ data, loading, activeRange }) {
+  if (loading) return <div className="p-4 text-muted">Loading...</div>;
+  if (!data || data.length === 0) return <div className="p-4 text-muted">No sessions found.</div>;
 
-export default function ActivityTable({ range, activeRange }) {
-  const { data, loading } = useActivityHistory(range || 7);
+  // Reverse so newest is on top
+  const displayData = [...data].reverse();
 
-  /* =====================
-     LOADING STATE
-  ===================== */
-  if (loading) {
-    return (
-      <div className="activity-card border-0">
-        <div className="activity-header">
-          <h5>Activity History</h5>
-        </div>
-        <p className="text-muted px-3">Loading activity…</p>
-      </div>
-    );
-  }
-
-  /* =====================
-     EMPTY STATE
-  ===================== */
-  if (!data || data.length === 0) {
-    return (
-      <div className="activity-card empty border-0">
-        <h5>No activity data yet</h5>
-        <p className="text-muted">Connect Google Fit to start tracking your daily activity.</p>
-      </div>
-    );
-  }
-
-  /* =====================
-     TABLE
-  ===================== */
   return (
     <div className="activity-card border-0">
-      {/* Header */}
       <div className="activity-header">
         <h5>Activity History</h5>
         <span className="activity-filter">Last {activeRange} days</span>
       </div>
 
-      {/* Table */}
-      <div className="activity-table">
+      <div className="activity-table noScroll">
         <div className="activity-row header">
-          <span>Category</span>
+          <span>Activity</span>
           <span>Date</span>
-          <span>Steps</span>
-          <span>Calories</span>
+          <span>Duration</span>
+          <span>Intensity</span> {/* Added intensity column */}
         </div>
 
-        {data.map((d, i) => {
-          // For now everything is daily summary
-          // Later this becomes d.activity_type
-          const activityKey = "daily";
-          const cfg = ACTIVITY_CONFIG[activityKey];
-
-          const Icon = cfg.icon;
+        {displayData.map((s, i) => {
+          const config = getActivityConfig(s.activity_type);
+          const intensity = s.duration_minutes > 45 ? "High" : s.duration_minutes > 25 ? "Moderate" : "Light";
+          const source = s.source || "google_fit";
 
           return (
             <div className="activity-row" key={i}>
-              <span className="category">
-                <span className="cat-icon">
-                  <Icon />
-                </span>
-                {cfg.label}
-              </span>
+              <div className="activity-cell">
+                <div className="activity-icon-wrapper">
+                  <div className={`activity-icon ${intensity.toLowerCase()}`}>{config.icon}</div>
+                  <div className="source-badge">{source.includes("apple") ? <FaApple /> : <SiGooglefit />}</div>
+                </div>
+                <span className="activity-title">{s.activity_type}</span>
+              </div>
 
-              <span>
-                {new Date(d.date).toLocaleDateString(undefined, {
+              <span className="text-muted">
+                {new Date(s.start_time).toLocaleDateString(undefined, {
                   month: "short",
                   day: "numeric",
                 })}
               </span>
 
-              <span>{d.steps.toLocaleString()}</span>
+              <span className="fw-bold text-muted">{s.duration_minutes} min</span>
 
-              <span className="calory">{Math.round(d.calories)} kcal</span>
+              {/* Added the Intensity Chip like the Activity Page */}
+              <span>
+                <span className={`intensity-chip ${intensity.toLowerCase()}`}>{intensity}</span>
+              </span>
             </div>
           );
         })}

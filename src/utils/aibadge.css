@@ -1,0 +1,34 @@
+/* Premium AI Badge Style */
+.ai-badge-v2 {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(139, 92, 246, 0.08); /* Very faint purple background */
+  border: 1px solid rgba(139, 92, 246, 0.15); /* Faint purple border */
+  border-radius: 20px; /* Fully rounded "pill" shape */
+  padding: 3px 10px; /* Tighter padding for a small, subtle look */
+  margin-bottom: 8px; /* Standard spacing for placement above text */
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.03); /* Extremely soft glow */
+  user-select: none; /* Prevents text selection on a UI element */
+}
+
+/* The small status dot */
+.ai-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+/* Icon & Text Styling */
+.ai-brain-icon {
+  color: #a78bfa; /* Matches the animated color scheme */
+  opacity: 0.9;
+}
+
+.ai-badge-text {
+  font-size: 0.75rem; /* Matches your "smallest" helper class */
+  font-weight: 600; /* For punchiness */
+  letter-spacing: 0.03em; /* Technical spacing */
+  color: #a78bfa; /* Keep the color scheme consistent */
+  text-transform: uppercase; /* Feels more technical and structured */
+}

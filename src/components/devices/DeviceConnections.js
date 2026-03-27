@@ -2,6 +2,7 @@ import { Container, Row, Col, Button, Modal, Form } from "react-bootstrap";
 import { motion, AnimatePresence, delay } from "framer-motion";
 import { useState } from "react";
 import { SiGooglefit, SiFitbit, SiGarmin, SiSamsung } from "react-icons/si";
+import { MdBloodtype } from "react-icons/md";
 
 import toast from "react-hot-toast";
 import "./DeviceConnections.css";
@@ -10,13 +11,20 @@ import { Toaster } from "react-hot-toast";
 import { FaHeartbeat, FaPlus, FaApple, FaMobileAlt, FaWatchmanMonitoring } from "react-icons/fa";
 import api from "../../auth/api";
 import { useEffect } from "react";
+import QRCode from "react-qr-code";
 
 const devicesList = [
   { id: "googlefit", name: "Google Fit", icon: SiGooglefit, color: "#4285F4" },
   // { id: "fitbit", name: "Fitbit", icon: SiFitbit, color: "#00B0B9" },
   { id: "garmin", name: "Garmin", icon: SiGarmin, color: "#000000" },
   { id: "oura", name: "Oura Ring", type: "text", label: "OURA", color: "#111827" },
-  { id: "glucose", name: "Glucose Monitor", icon: FaHeartbeat, color: "#ef4444" },
+  { id: "dexcom", name: "Dexcom CGM", icon: MdBloodtype, color: "#FF8C00" },
+  {
+    id: "apple",
+    name: "Apple Health",
+    icon: FaApple,
+    color: "#fff",
+  },
 ];
 
 const otherDevices = [
@@ -28,6 +36,49 @@ const otherDevices = [
 ];
 
 export default function DeviceConnections() {
+  const [qrToken, setQrToken] = useState(null);
+  const [qrLoading, setQrLoading] = useState(false);
+  const [expiresIn, setExpiresIn] = useState(60);
+  const [appleNotified, setAppleNotified] = useState(false);
+
+  useEffect(() => {
+    if (!qrToken) return;
+
+    setExpiresIn(60);
+
+    const interval = setInterval(() => {
+      setExpiresIn((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          setQrToken(null);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [qrToken]);
+
+  const generateQr = async () => {
+    try {
+      setQrLoading(true);
+
+      const res = await api.post("/auth/qr/generate");
+
+      setQrToken(res.data.token);
+
+      // auto expire UI after 60s
+      // setTimeout(() => {
+      //   setQrToken(null);
+      // }, 60000);
+    } catch (e) {
+      toast.error("Failed to generate QR");
+    } finally {
+      setQrLoading(false);
+    }
+  };
+
   const [devices, setDevices] = useState(
     devicesList.map((d) => ({
       ...d,
@@ -35,63 +86,180 @@ export default function DeviceConnections() {
     })),
   );
 
+  // const refreshDeviceStatus = async () => {
+  //   try {
+  //     const res = await api.get("/devices/status");
+
+  //     setDevices((prev) =>
+  //       prev.map((d) =>
+  //         d.id === "googlefit" ? { ...d, status: res.data.googlefit ? "connected" : "disconnected" } : d.id === "apple" ? { ...d, status: res.data.apple ? "connected" : "disconnected" } : d,
+  //       ),
+  //     );
+  //   } catch {
+  //     toast.error("Failed to refresh device status");
+  //   }
+  // };
+
   const refreshDeviceStatus = async () => {
     try {
       const res = await api.get("/devices/status");
 
-      setDevices((prev) => prev.map((d) => (d.id === "googlefit" ? { ...d, status: res.data.googlefit ? "connected" : "disconnected" } : d)));
+      setDevices((prev) =>
+        prev.map((d) => ({
+          ...d,
+          // This dynamically matches 'googlefit', 'apple', or 'dexcom' from the res.data keys
+          status: res.data[d.id] ? "connected" : "disconnected",
+        })),
+      );
     } catch {
       toast.error("Failed to refresh device status");
     }
   };
-
   useEffect(() => {
     refreshDeviceStatus();
   }, []);
 
+  const [showAppleModal, setShowAppleModal] = useState(false);
+
+  // const connectDevice = (id) => {
+  //   if (id === "apple") {
+  //     setShowAppleModal(true);
+  //     generateQr(); // ✅ ADD THIS
+  //     return;
+  //   }
+
+  //   const authUrls = {
+  //     googlefit: "http://localhost:5000/auth/google",
+  //     dexcom: "http://localhost:5000/auth/dexcom",
+  //   };
+
+  //   if (!authUrls[id]) {
+  //     toast("Coming soon 🚧");
+  //     return;
+  //   }
+
+  //   const width = 520;
+  //   const height = 620;
+
+  //   const left = window.screenX + (window.outerWidth - width) / 2;
+  //   const top = window.screenY + (window.outerHeight - height) / 2;
+
+  //   const popup = window.open(authUrls[id], `${id}Auth`, `width=${width},height=${height},left=${left},top=${top}`);
+  //   if (!popup) {
+  //     toast.error("Popup blocked. Please allow popups.");
+  //     return;
+  //   }
+
+  //   setDevices((prev) => prev.map((d) => (d.id === id ? { ...d, status: "connecting" } : d)));
+
+  //   const handleMessage = (event) => {
+  //     if (event.data === `${id}_connected`) {
+  //       toast.success(`${id === "dexcom" ? "Dexcom" : "Google Fit"} connected!`);
+  //       refreshDeviceStatus();
+  //       window.removeEventListener("message", handleMessage);
+  //     }
+  //   };
+
+  //   window.addEventListener("message", handleMessage);
+  //   toast.loading("Waiting for Google Fit authorization…", {
+  //     id: "googlefit-auth",
+  //   });
+
+  //   // 👂 Listen for success message
+  //   // const handleMessage = (event) => {
+  //   //   if (event.origin !== "http://localhost:3000") return;
+
+  //   //   if (event.data === "googlefit_connected") {
+  //   //     toast.success("Google Fit connected!", {
+  //   //       id: "googlefit-auth",
+  //   //     });
+
+  //   //     // Refresh device status
+  //   //     refreshDeviceStatus();
+
+  //   //     window.removeEventListener("message", handleMessage);
+  //   //   }
+  //   // };
+
+  //   // window.addEventListener("message", handleMessage);
+  // };
+
   const connectDevice = (id) => {
-    if (id !== "googlefit") {
+    if (id === "apple") {
+      setShowAppleModal(true);
+      generateQr();
+      return;
+    }
+
+    const jwtToken = localStorage.getItem("jwt");
+    const authUrls = {
+      googlefit: `http://localhost:5000/auth/google?token=${jwtToken}`,
+      dexcom: `http://localhost:5000/auth/dexcom?token=${jwtToken}`,
+    };
+
+    if (!authUrls[id]) {
       toast("Coming soon 🚧");
       return;
     }
 
-    const width = 520;
-    const height = 620;
-
+    const width = id === "dexcom" ? 700 : 520;
+    const height = 720;
     const left = window.screenX + (window.outerWidth - width) / 2;
     const top = window.screenY + (window.outerHeight - height) / 2;
 
-    const popup = window.open("http://localhost:5000/auth/google", "googleFitAuth", `width=${width},height=${height},left=${left},top=${top}`);
+    const popup = window.open(authUrls[id], `${id}Auth`, `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes`);
 
     if (!popup) {
       toast.error("Popup blocked. Please allow popups.");
       return;
     }
 
-    setDevices((prev) => prev.map((d) => (d.id === "googlefit" ? { ...d, status: "connecting" } : d)));
-    toast.loading("Waiting for Google Fit authorization…", {
-      id: "googlefit-auth",
-    });
+    // 1. Set state to connecting
+    setDevices((prev) => prev.map((d) => (d.id === id ? { ...d, status: "connecting" } : d)));
 
-    // 👂 Listen for success message
+    const toastId = `${id}-auth`;
+    const deviceName = id === "dexcom" ? "Dexcom" : "Google Fit";
+    toast.loading(`Waiting for ${deviceName} authorization…`, { id: toastId });
+
+    // 2. Use a local variable to track if we've already handled the success
+    let isHandled = false;
+
     const handleMessage = (event) => {
-      if (event.origin !== "http://localhost:3000") return;
-
-      if (event.data === "googlefit_connected") {
-        toast.success("Google Fit connected!", {
-          id: "googlefit-auth",
-        });
-
-        // Refresh device status
+      // Only handle relevant messages
+      if (event.data === `${id}_connected`) {
+        isHandled = true; // Mark as successful
+        clearInterval(checkPopupClosed);
+        toast.success(`${deviceName} connected!`, { id: toastId });
         refreshDeviceStatus();
-
         window.removeEventListener("message", handleMessage);
       }
     };
 
     window.addEventListener("message", handleMessage);
+
+    const checkPopupClosed = setInterval(() => {
+      if (popup.closed) {
+        clearInterval(checkPopupClosed);
+        window.removeEventListener("message", handleMessage);
+
+        // 3. ONLY reset to disconnected if it wasn't handled by the message event
+        if (!isHandled) {
+          setDevices((prev) => prev.map((d) => (d.id === id && d.status === "connecting" ? { ...d, status: "disconnected" } : d)));
+          toast.dismiss(toastId);
+        }
+      }
+    }, 1000);
   };
 
+  const disconnectDexcom = async () => {
+    try {
+      await api.post("/devices/dexcom/disconnect"); // Ensure this route exists on backend
+      toast.success("Dexcom disconnected");
+      refreshDeviceStatus();
+    } catch {
+      toast.error("Failed to disconnect Dexcom");
+    }
+  };
   const disconnectGoogleFit = async () => {
     try {
       await api.post("/devices/googlefit/disconnect");
@@ -118,6 +286,77 @@ export default function DeviceConnections() {
         id: "sync",
       });
     }
+  };
+
+  const token = localStorage.getItem("jwt");
+  useEffect(() => {
+    if (!token) return;
+
+    const eventSource = new EventSource(`http://localhost:5000/devices/stream?token=${token}`);
+
+    eventSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+
+      setDevices((prev) =>
+        prev.map((d) => {
+          // 🛡️ PROTECTIVE SHIELD: If the device is currently "connecting",
+          // do NOT let the SSE stream reset it to "disconnected".
+          if (d.status === "connecting") return d;
+
+          if (d.id === "googlefit") {
+            return { ...d, status: data.googlefit ? "connected" : "disconnected" };
+          }
+          if (d.id === "apple") {
+            return {
+              ...d,
+              status: data.apple ? "connected" : "disconnected",
+              lastSynced: data.timestamp,
+            };
+          }
+          if (d.id === "dexcom") {
+            return { ...d, status: data.dexcom ? "connected" : "disconnected" };
+          }
+          return d;
+        }),
+      );
+    };
+
+    eventSource.onerror = () => {
+      eventSource.close();
+    };
+
+    return () => eventSource.close();
+  }, [token]);
+
+  useEffect(() => {
+    const apple = devices.find((d) => d.id === "apple");
+
+    if (apple?.status === "connected" && !appleNotified) {
+      setShowAppleModal(false);
+      setAppleNotified(true);
+
+      toast.success("Apple Health connected via iPhone 🍏", {
+        duration: 4000,
+      });
+    }
+    if (apple?.status === "disconnected") {
+      setAppleNotified(false);
+    }
+  }, [devices]);
+
+  function timeAgo(ts) {
+    if (!ts) return "—";
+
+    const diff = Math.floor((Date.now() - ts) / 1000);
+
+    if (diff < 60) return `${diff}s ago`;
+    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+
+    return `${Math.floor(diff / 3600)}h ago`;
+  }
+  const disconnectApple = async () => {
+    await api.post("/devices/apple/disconnect");
+    refreshDeviceStatus();
   };
 
   const [showModal, setShowModal] = useState(false);
@@ -195,6 +434,17 @@ export default function DeviceConnections() {
                     </div>
                   </motion.div>
                 )}
+
+                {device.id === "apple" && device.status === "connected" && (
+                  <div className="apple-meta mt-2">
+                    {/* <span className="text-muted small">Connected · 
+                    Last sync {timeAgo(device.lastSynced)}
+                    
+                    </span> */}
+
+                    <span className="text-muted small">Connected · Sync it Via App</span>
+                  </div>
+                )}
                 <div className="mt-4">
                   {device.status === "disconnected" && (
                     <Button className="connect-btn" onClick={() => connectDevice(device.id)}>
@@ -206,13 +456,20 @@ export default function DeviceConnections() {
 
                   {device.status === "connected" && (
                     <div className="d-flex justify-content-center align-items-center gap-2 mt-4">
-                      <Button className="sync-btn mb-0" size="sm" onClick={syncGoogleFit}>
-                        Sync Now
-                      </Button>
-
-                      <Button variant="danger" className="connect-btn rounded-2 bg-warning " onClick={disconnectGoogleFit}>
+                      {device.id === "googlefit" && <Button onClick={syncGoogleFit}>Sync Now</Button>}
+                      <Button
+                        onClick={
+                          device.id === "googlefit"
+                            ? disconnectGoogleFit
+                            : device.id === "apple"
+                              ? disconnectApple
+                              : device.id === "dexcom"
+                                ? disconnectDexcom // ✅ Added this
+                                : null
+                        }
+                      >
                         Disconnect
-                      </Button>
+                      </Button>{" "}
                     </div>
                   )}
                 </div>
@@ -267,6 +524,65 @@ export default function DeviceConnections() {
           </Modal>
         )}
       </AnimatePresence>
+
+      <Modal show={showAppleModal} centered onHide={() => setShowAppleModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Connect Apple Health</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body className="text-center">
+          <FaApple size={42} style={{ marginBottom: 16 }} />
+
+          <p className="mb-3">Scan this QR code from your iPhone</p>
+
+          {qrLoading && <p className="text-muted">Generating secure QR…</p>}
+
+          {!qrLoading && qrToken && (
+            <div className="qr-box mb-3">
+              <QRCode value={`biotrack://auth?token=${qrToken}`} size={180} />
+            </div>
+          )}
+
+          {qrToken && (
+            <>
+              <div className="text-muted small mt-2">Expires in {expiresIn}s</div>
+
+              <div style={{ height: 4, background: "#e5e7eb", marginTop: 8 }}>
+                <div
+                  style={{
+                    width: `${(expiresIn / 60) * 100}%`,
+                    height: "100%",
+                    background: "#2563eb",
+                    transition: "width 1s linear",
+                  }}
+                />
+              </div>
+            </>
+          )}
+
+          {!qrToken && !qrLoading && (
+            <Button size="sm" onClick={generateQr}>
+              Generate QR
+            </Button>
+          )}
+
+          <div className="mt-3 text-muted small">
+            1. Open BioTrack app on your iPhone
+            <br />
+            2. Tap "Scan QR"
+            <br />
+            3. Allow Apple Health permissions
+            <br />
+            4. Your data will sync automatically
+          </div>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowAppleModal(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </motion.div>
   );
 }

@@ -8,6 +8,8 @@ import SignIn from "./auth/signin";
 import SignUp from "./auth/signup";
 import HeartbeatIntro from "./utils/HeartbeatIntro";
 import { useAuth } from "./auth/AuthContext";
+// 1. Import the Simulation Provider
+import { SimulationProvider } from "./utils/SimulationContext";
 
 import "./App.css";
 import AuthSuccess from "./auth/AuthSuccess";
@@ -21,7 +23,8 @@ function App() {
   }
 
   return (
-    <>
+    // 2. Wrap everything in the SimulationProvider
+    <SimulationProvider>
       <Toaster position="bottom-center" />
 
       {showIntro && <HeartbeatIntro onComplete={() => setShowIntro(false)} />}
@@ -35,7 +38,6 @@ function App() {
 
             {/* AUTH */}
             <Route path="/signin" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <SignIn />} />
-
             <Route path="/signup" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <SignUp />} />
 
             {/* PROTECTED */}
@@ -46,7 +48,7 @@ function App() {
           </Routes>
         </motion.div>
       )}
-    </>
+    </SimulationProvider>
   );
 }
 

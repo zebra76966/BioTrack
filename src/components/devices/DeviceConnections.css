@@ -230,3 +230,10 @@
   justify-content: center;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
 }
+
+.qr-box {
+  background: #fff;
+  padding: 14px;
+  border-radius: 14px;
+  display: inline-block;
+}

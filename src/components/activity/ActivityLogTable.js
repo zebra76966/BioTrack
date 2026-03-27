@@ -1,7 +1,10 @@
 import { Table } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { FaWalking, FaDumbbell, FaHeartbeat, FaBed } from "react-icons/fa";
+import { FaApple } from "react-icons/fa";
+import { SiGooglefit } from "react-icons/si";
 import "./activityLogTable.css";
+import { getActivityConfig } from "../../utils/icons";
 
 /* Dummy activity log data */
 
@@ -40,11 +43,16 @@ export default function ActivityLogTable({ data = [] }) {
         <tbody>
           {data.map((s, i) => {
             const intensity = s.duration_minutes > 45 ? "High" : s.duration_minutes > 25 ? "Moderate" : "Light";
+            const config = getActivityConfig(s.activity_type);
 
             return (
               <tr key={i}>
                 <td className="activity-cell">
-                  <span className="activity-icon">{typeIcon[s.activity_type] || <FaWalking />}</span>
+                  {/* <span className="activity-icon">{typeIcon[s.activity_type] || <FaWalking />}</span> */}
+                  <div className="activity-icon-wrapper">
+                    <div className={`activity-icon ${intensity.toLowerCase()}`}>{config.icon}</div>
+                    <div className="source-badge">{s.source === "apple_health" ? <FaApple /> : <SiGooglefit />}</div>
+                  </div>
                   <span className="activity-title">{s.activity_type}</span>
                 </td>
                 <td>{new Date(s.start_time).toLocaleDateString()}</td>

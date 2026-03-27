@@ -2,6 +2,8 @@ import { Card } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { FaHeartbeat, FaFire, FaWalking } from "react-icons/fa";
 import "./statCard.css";
+import { FaApple } from "react-icons/fa";
+import { SiGooglefit } from "react-icons/si";
 
 const icons = {
   muscle: <FaHeartbeat />,
@@ -9,11 +11,12 @@ const icons = {
   calories: <FaFire />,
 };
 
-export default function StatCard({ title, value, sub, icon }) {
+export default function StatCard({ title, value, sub, icon, sources }) {
   return (
     <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
       <div className="stat-card">
         {/* Header */}
+
         <div className="stat-header">
           <div className="stat-icon">{icons[icon]}</div>
           <span className="stat-title">{title}</span>
@@ -24,6 +27,16 @@ export default function StatCard({ title, value, sub, icon }) {
           <span className="stat-value">{value}</span>
           {sub && <span className="stat-sub">{sub}</span>}
         </div>
+
+        {sources && (
+          <div className="sources">
+            {[...new Set(sources.filter(Boolean))].map((s) => (
+              <span key={s} className="source-pill">
+                {s === "apple_health" ? <FaApple /> : <SiGooglefit />}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
     </motion.div>
   );

@@ -1,11 +1,8 @@
 import { useState, useMemo } from "react";
 import { Bar } from "react-chartjs-2";
-import { motion } from "framer-motion";
-import { impacts, BASE_SCORE } from "../../data/healthImpacts";
-import "./WaterfallCard.css";
-
-import { FaFlask, FaRunning, FaHeartbeat } from "react-icons/fa";
-
+import { motion, AnimatePresence } from "framer-motion";
+import { useSimulation } from "../../utils/SimulationContext";
+import { FaFlask, FaRunning, FaHeartbeat, FaUndo } from "react-icons/fa";
 import "./WaterfallCard.css";
 
 const COLORS = {
@@ -14,123 +11,156 @@ const COLORS = {
   negative: "#F2A365",
 };
 
-export default function WaterfallCard() {
-  const [ldl, setLdl] = useState(-3);
+const BASE_SCORE = 70;
 
+export default function WaterfallCard({ todaySteps = 0, todayCalories = 0 }) {
+  const { simulatedMarkers } = useSimulation();
   const [mode, setMode] = useState("all");
+
+  // Multi-marker simulation state
+  const [simDeltas, setSimDeltas] = useState({ trt: 0, ldl: 0, hba1c: 0 });
+  const [activeSim, setActiveSim] = useState("ldl");
+
+  const handleReset = () => setSimDeltas({ trt: 0, ldl: 0, hba1c: 0 });
+
+  const allImpacts = useMemo(() => {
+    const trt = simulatedMarkers.find((m) => m.id === "trt").value;
+    const ldl = simulatedMarkers.find((m) => m.id === "ldl").value;
+    const hba1c = simulatedMarkers.find((m) => m.id === "hba1c").value;
+
+    return [
+      {
+        key: "trt",
+        category: "labs",
+        title: "Testosterone",
+        value: (trt > 600 ? 8 : trt > 400 ? 4 : -5) + simDeltas.trt,
+        description: trt > 600 ? "Optimal T-levels" : "T-level impact",
+      },
+      {
+        key: "ldl",
+        category: "labs",
+        title: "Lipids",
+        value: (ldl < 100 ? 6 : ldl < 130 ? 2 : -7) + simDeltas.ldl,
+        description: ldl < 100 ? "Excellent LDL profile" : "Lipid impact",
+      },
+      {
+        key: "hba1c",
+        category: "labs",
+        title: "Glucose",
+        value: (hba1c < 5.4 ? 5 : -4) + simDeltas.hba1c,
+        description: hba1c < 5.4 ? "Stable glucose" : "Glucose impact",
+      },
+      {
+        key: "steps",
+        category: "recovery",
+        title: "Movement",
+        value: todaySteps > 8000 ? 7 : todaySteps > 4000 ? 3 : -3,
+        description: "Step volume",
+      },
+      {
+        key: "calories",
+        category: "recovery",
+        title: "Burn",
+        value: todayCalories > 500 ? 4 : 1,
+        description: "Metabolic burn",
+      },
+    ];
+  }, [simulatedMarkers, todaySteps, todayCalories, simDeltas]);
+
+  const filteredImpacts = useMemo(() => {
+    if (mode === "all") return allImpacts;
+    return allImpacts.filter((i) => i.category === mode);
+  }, [mode, allImpacts]);
 
   const computed = useMemo(() => {
     let running = BASE_SCORE;
-
-    return impacts.map((i) => {
-      const value = i.key === "ldl" ? ldl : i.basePoints;
+    return filteredImpacts.map((i) => {
       const start = running;
-      running += value;
-
-      return {
-        ...i,
-        value,
-        start,
-        end: running,
-      };
+      running += i.value;
+      return { ...i, start, end: running };
     });
-  }, [ldl]);
+  }, [filteredImpacts]);
 
-  const finalScore = BASE_SCORE + computed.reduce((a, b) => a + b.value, 0);
+  const finalScore = BASE_SCORE + allImpacts.reduce((acc, curr) => acc + curr.value, 0);
 
   return (
     <motion.div className="insight-card waterfall-card" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}>
+      {/* HEADER SECTION */}
       <div className="waterfall-header">
         <div className="waterfall-title">
           <h6>Health Score Breakdown</h6>
-          <span className="waterfall-sub">How each factor shifts your score</span>
+          <span className="waterfall-sub">Analyzing {mode} contributors</span>
         </div>
 
         <div className="waterfall-toggle">
           <button className={mode === "all" ? "active" : ""} onClick={() => setMode("all")}>
-            <FaHeartbeat />
-            All
+            <FaHeartbeat /> All
           </button>
-
           <button className={mode === "labs" ? "active" : ""} onClick={() => setMode("labs")}>
-            <FaFlask />
-            Labs
+            <FaFlask /> Labs
           </button>
-
           <button className={mode === "recovery" ? "active" : ""} onClick={() => setMode("recovery")}>
-            <FaRunning />
-            Recovery
+            <FaRunning /> Recovery
           </button>
         </div>
       </div>
 
-      <Bar
-        data={{
-          labels: ["Baseline", ...computed.map((i) => i.title)],
-          datasets: [
-            {
-              label: "Offset",
-              data: [0, ...computed.map((i) => i.start)],
-              backgroundColor: "transparent",
-              stack: "stack1",
-            },
-            {
-              label: "Impact",
-              data: [BASE_SCORE, ...computed.map((i) => i.value)],
-              backgroundColor: [COLORS.baseline, ...computed.map((i) => (i.value > 0 ? COLORS.positive : COLORS.negative))],
-              borderRadius: 12,
-              barThickness: 34,
-              stack: "stack1",
-            },
-          ],
-        }}
-        options={{
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label: (ctx) => {
-                  const item = computed[ctx.dataIndex - 1];
-                  if (!item) return `Baseline: ${BASE_SCORE}`;
-                  return `${item.description} (${item.value > 0 ? "+" : ""}${item.value} pts)`;
-                },
+      {/* CHART SECTION */}
+      <div className="chart-container" style={{ height: "220px", marginTop: "1rem" }}>
+        <Bar
+          data={{
+            labels: ["Base", ...computed.map((i) => i.title)],
+            datasets: [
+              { data: [0, ...computed.map((i) => i.start)], backgroundColor: "transparent", stack: "stack1" },
+              {
+                data: [BASE_SCORE, ...computed.map((i) => i.value)],
+                backgroundColor: [COLORS.baseline, ...computed.map((i) => (i.value > 0 ? COLORS.positive : COLORS.negative))],
+                borderRadius: 6,
+                barThickness: 20,
+                stack: "stack1",
               },
+            ],
+          }}
+          options={{
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              y: { display: false, beginAtZero: true },
+              x: { grid: { display: false }, ticks: { color: "#8B8FA3", font: { size: 9 } } },
             },
-          },
-          scales: {
-            y: { display: false },
-            x: {
-              grid: { display: false },
-              ticks: {
-                color: "#8B8FA3",
-                font: { size: 11 },
-              },
-            },
-          },
-        }}
-      />
+          }}
+        />
+      </div>
 
-      {/* SIMULATION */}
+      {/* INTERACTIVE SIMULATION UI */}
       <div className="waterfall-sim">
-        <div className="sim-header">
-          <div>
-            <strong>Simulate Improvement</strong>
-            <span className="sim-sub">See how improving LDL would affect your score</span>
+        <div className="sim-nav">
+          <div className="sim-tabs">
+            {["ldl", "trt", "hba1c"].map((id) => (
+              <button key={id} className={`sim-tab ${activeSim === id ? "active" : ""}`} onClick={() => setActiveSim(id)}>
+                {id.toUpperCase()}
+              </button>
+            ))}
           </div>
-
-          <span className="sim-delta">
-            {ldl > -3 ? "+" : ""}
-            {ldl + 3} pts
-          </span>
+          <button className="reset-btn" onClick={handleReset} title="Reset all simulations">
+            <FaUndo /> Reset
+          </button>
         </div>
 
-        <div className="sim-slider">
-          <input type="range" min={-5} max={0} value={ldl} onChange={(e) => setLdl(Number(e.target.value))} />
+        <div className="sim-controls">
+          <div className="sim-info">
+            <strong>Adjust {activeSim.toUpperCase()} Impact</strong>
+            <span className="sim-delta">
+              {simDeltas[activeSim] > 0 ? "+" : ""}
+              {simDeltas[activeSim]} pts
+            </span>
+          </div>
+
+          <input type="range" min={-10} max={10} step={1} value={simDeltas[activeSim]} onChange={(e) => setSimDeltas({ ...simDeltas, [activeSim]: Number(e.target.value) })} />
         </div>
 
         <div className="sim-result">
-          New projected score
-          <strong>{finalScore}</strong>
+          Overall Projected Score: <strong>{finalScore}</strong>
         </div>
       </div>
     </motion.div>

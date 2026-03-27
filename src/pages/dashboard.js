@@ -1,88 +1,96 @@
 import { Container, Row, Col } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import TopTabs from "../components/TopTabs";
-
 import StatCard from "../components/StatCards";
-import HeartStats from "../components/HeartStats";
 import ActivityTable from "../components/ActivityTable";
-import { stats } from "../data/dummyData";
-
-import "../styles/dashboard.css";
 import VitalStatCard from "../components/VitalStatCard";
 import CheckupSchedule from "../components/CheckupSchedule";
+
+// Tab Pages
 import InsightsPage from "./InsightsPage";
 import SchedulePage from "./SchedulePage";
 import HistoryPage from "./HistoryPage";
 import ActivityPage from "./ActivityPage";
 import DeviceConnections from "../components/devices/DeviceConnections";
-import { FiRefreshCw } from "react-icons/fi";
 
-import { useActivityTrends } from "../hooks/useActivityTrends";
-import { useNavigate } from "react-router-dom";
+import { FiRefreshCw } from "react-icons/fi";
 import api from "../auth/api";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
+import "../styles/dashboard.css";
+import { useActivitySessions } from "../hooks/useActivitySessions";
+import BiomarkerSimulator from "../utils/BiomarkerSimulator";
+import AiChatPanel from "../utils/AiChatPanel";
+import ActiveBlueprint from "./ActiveBlueprint";
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("Dashboard");
-  const navigate = useNavigate();
-  const [filter, setFilter] = useState("All");
   const [range, setRange] = useState(7);
+  const [mode, setMode] = useState("smart");
+  const [filter, setFilter] = useState("All");
   const [activeRange, setActiveRange] = useState(7);
-
+  const [loading, setLoading] = useState(true);
+  const [activityData, setActivityData] = useState([]);
   const [syncing, setSyncing] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const sessions = useActivitySessions(range, refreshKey);
 
-  const { data: activityData, loading, refetch } = useActivityTrends(range, activeTab === "Dashboard");
+  const [priority, setPriority] = useState({
+    steps: "apple_health",
+    calories: "apple_health",
+    distance: "apple_health",
+  });
+
+  // Fetch merged data using the same logic as ActivityPage
+  const fetchDashboardData = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await api.get(`/activity/merged`, {
+        params: {
+          days: range,
+          mode,
+          priority: JSON.stringify(priority),
+        },
+      });
+      setActivityData(res.data);
+      setActiveRange(range);
+    } catch (e) {
+      console.error("Dashboard fetch error", e);
+    } finally {
+      setLoading(false);
+    }
+  }, [range, mode, priority]);
 
   useEffect(() => {
     if (activeTab === "Dashboard") {
-      refetch();
-      toast.dismiss();
-      toast("Refreshing activity data…", {
-        duration: 1200,
-        position: "bottom-center",
-      });
+      fetchDashboardData();
     }
-  }, [activeTab]);
-
-  const hasActivityData = activityData && activityData.length > 0;
+  }, [activeTab, fetchDashboardData]);
 
   const syncActivity = async () => {
     try {
       setSyncing(true);
-
-      toast.loading(`Syncing last ${range} days…`, {
-        id: "activity-sync",
-        position: "bottom-center",
-      });
-
+      toast.loading(`Syncing...`, { id: "dash-sync" });
       await api.post("/sync/manual", { days: range });
+      toast.success("Synced", { id: "dash-sync" });
 
-      toast.success("Activity synced successfully ", {
-        id: "activity-sync",
-        position: "bottom-center",
-      });
-      setActiveRange(range);
+      fetchDashboardData();
+      setRefreshKey((prev) => prev + 1); // 2. Refresh sessions after sync
     } catch (e) {
-      toast.error("Failed to sync activity ❌", {
-        id: "activity-sync",
-        position: "bottom-center",
-      });
+      toast.error("Sync failed", { id: "dash-sync" });
     } finally {
       setSyncing(false);
     }
   };
 
-  // days where user actually walked
-  const activeDays = hasActivityData ? activityData.filter((d) => d.steps > 0) : [];
-
-  const totalSteps = hasActivityData ? activityData.reduce((sum, d) => sum + d.steps, 0) : 0;
+  // Derived Stats
+  const hasActivityData = activityData && activityData.length > 0;
+  const activeDays = activityData.filter((d) => d.steps > 0);
+  const today = activityData[activityData.length - 1];
 
   const avgSteps = activeDays.length > 0 ? Math.round(activeDays.reduce((sum, d) => sum + d.steps, 0) / activeDays.length) : 0;
-
-  const totalCalories = hasActivityData ? Math.round(activityData.reduce((sum, d) => sum + d.calories, 0)) : 0;
-
-  const totalDistance = hasActivityData ? (activityData.reduce((sum, d) => sum + d.distance, 0) / 1000).toFixed(1) : "0.0";
+  const totalCalories = Math.round(activityData.reduce((sum, d) => sum + d.calories, 0));
+  const totalDistance = (activityData.reduce((sum, d) => sum + d.distance, 0) / 1000).toFixed(1);
 
   const appointments = [
     {
@@ -163,73 +171,95 @@ export default function Dashboard() {
         {activeTab === "Dashboard" && (
           <Row>
             <Col md={7}>
-              <Row className="align-items-center mb-4">
-                <Col>
+              <div className="d-flex justify-content-between align-items-center mb-4">
+                <div>
                   <h2 className="page-title mb-1">Overview Of Your Health</h2>
-                  <p className="page-subtitle mb-0">Harmonious Living: Balance, Strength, Vitality, Wellness.</p>
-                </Col>
+                  <p className="page-subtitle mb-0">Balance, Strength, Vitality, Wellness.</p>
+                </div>
 
-                <Col xs="auto" className="d-flex align-items-center gap-3">
+                <div className="d-flex align-items-center gap-2">
                   {/* RANGE TOGGLE */}
-                  <motion.div className="range-toggle" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }}>
+                  <div className="range-toggle">
                     {[7, 30].map((d) => (
                       <button key={d} className={`toggle-btn ${range === d ? "active" : ""}`} onClick={() => setRange(d)}>
-                        {d} Days
+                        {d}D
                       </button>
                     ))}
-                  </motion.div>
+                  </div>
 
-                  {/* SYNC BUTTON */}
-                  <motion.button className="sync-activity-btn" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} disabled={syncing} onClick={syncActivity}>
-                    {syncing ? (
-                      <motion.span animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }}>
-                        <FiRefreshCw />
-                      </motion.span>
-                    ) : (
-                      <FiRefreshCw />
-                    )}
-                    <span>Resync</span>
+                  {/* MODE TOGGLE */}
+                  <div className="mode-toggle">
+                    {["smart", "priority"].map((m) => (
+                      <button key={m} className={`toggle-btn ${mode === m ? "active" : ""}`} onClick={() => setMode(m)}>
+                        {m === "smart" ? "Smart" : "Priority"}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* PRIORITY SELECTORS */}
+                  {mode === "priority" && (
+                    <select className="top-nav-select" value={priority.steps} onChange={(e) => setPriority({ ...priority, steps: e.target.value })}>
+                      <option value="apple_health">Apple</option>
+                      <option value="google_fit">Fit</option>
+                    </select>
+                  )}
+
+                  <motion.button className="sync-activity-btn" onClick={syncActivity} disabled={syncing} whileTap={{ scale: 0.95 }}>
+                    <FiRefreshCw className={syncing ? "spin" : ""} />
                   </motion.button>
-                </Col>
-              </Row>
-
-              {/* EMPTY STATE — NO DEVICE / NO DATA */}
-              {!loading && !hasActivityData && (
-                <div className="empty-state mb-4">
-                  <h5>No activity data yet</h5>
-                  <p className="text-muted">Connect Google Fit to start tracking your health insights.</p>
-                  <button className="btn btn-primary" onClick={() => setActiveTab("Devices")}>
-                    Connect Device
-                  </button>
                 </div>
-              )}
-
-              {/* STAT CARDS — ONLY IF DATA EXISTS */}
-              {hasActivityData && (
-                <Row className="mb-4">
-                  <Col md={4}>
-                    <StatCard title={`Avg Steps (${activeRange} days)`} value={avgSteps} sub="steps" icon="steps" />
-                  </Col>
-
-                  <Col md={4}>
-                    <StatCard title={`Total Calories Burned (${activeRange} days)`} value={totalCalories} sub="kcal" icon="calories" />
-                  </Col>
-
-                  <Col md={4}>
-                    <StatCard title={`Total Distance (${activeRange} days)`} value={totalDistance} sub="km" icon="muscle" />
-                  </Col>
-                </Row>
-              )}
-
-              <div className="mb-4">
-                <CheckupSchedule appointments={filteredAppointments} />
               </div>
-              <ActivityTable range={range} activeRange={activeRange} />
+
+              {hasActivityData ? (
+                <>
+                  <Row className="mb-4">
+                    <Col md={4}>
+                      <StatCard
+                        title="Today's Steps"
+                        value={today?.steps?.toLocaleString() ?? "0"}
+                        sub={`${activeRange}d window`}
+                        icon="steps"
+                        sources={mode === "priority" ? [today?.chosenSource?.steps] : today?.sources || []}
+                      />
+                    </Col>
+                    <Col md={4}>
+                      <StatCard
+                        title="Avg Steps"
+                        value={avgSteps.toLocaleString()}
+                        sub="Daily Average"
+                        icon="muscle"
+                        sources={mode === "priority" ? [today?.chosenSource?.steps] : today?.sources || []}
+                      />
+                    </Col>
+                    <Col md={4}>
+                      <StatCard title="Calories" value={`${totalCalories} kcal`} sub="Total Burn" icon="calories" sources={mode === "priority" ? [today?.chosenSource?.steps] : today?.sources || []} />
+                    </Col>
+                  </Row>
+
+                  <div className="mb-4">
+                    <CheckupSchedule appointments={filteredAppointments} />
+                  </div>
+
+                  <ActivityTable
+                    data={sessions} // 3. PASS SESSIONS INSTEAD OF activityData
+                    loading={loading}
+                    activeRange={range}
+                  />
+                </>
+              ) : (
+                !loading && (
+                  <div className="empty-state">
+                    <h5>No activity data</h5>
+                    <button className="btn btn-primary mt-2" onClick={() => setActiveTab("Devices")}>
+                      Connect Device
+                    </button>
+                  </div>
+                )
+              )}
             </Col>
 
-            <Col md={5} className="position-sticky top-0 start-0">
-              <VitalStatCard />
-              {/* <HeartStats /> */}
+            <Col md={5} className="position-sticky top-0">
+              <VitalStatCard todaySteps={today?.steps || 0} todayCalories={today?.calories || 0} />
             </Col>
           </Row>
         )}
@@ -260,6 +290,14 @@ export default function Dashboard() {
             <DeviceConnections />
           </div>
         )}
+        {activeTab === "Blueprints" && (
+          <div className="insights-wrapper">
+            <ActiveBlueprint />
+          </div>
+        )}
+
+        <BiomarkerSimulator />
+        <AiChatPanel />
       </div>
     </Container>
   );

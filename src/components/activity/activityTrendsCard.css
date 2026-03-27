@@ -112,3 +112,21 @@
   font-weight: 600;
   color: #1f1f2e;
 }
+
+.sources-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.source-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: #7c4dff;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  font-size: 13px;
+}

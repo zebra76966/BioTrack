@@ -2,6 +2,8 @@ import { useState, useMemo } from "react";
 import { Line } from "react-chartjs-2";
 import { motion } from "framer-motion";
 import { FaWalking, FaFire, FaClock, FaChartLine } from "react-icons/fa";
+import { FaApple } from "react-icons/fa";
+import { SiGooglefit } from "react-icons/si";
 import "./activityTrendsCard.css";
 
 import { Chart as ChartJS, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Filler } from "chart.js";
@@ -30,7 +32,7 @@ export default function ActivityTrendsCard({ data }) {
     },
   };
 
-  const [active, setActive] = useState("calories");
+  const [active, setActive] = useState("steps");
 
   const getStats = (data) => {
     const avg = Math.round(data.reduce((a, b) => a + b, 0) / data.length);
@@ -72,7 +74,7 @@ export default function ActivityTrendsCard({ data }) {
         },
       ],
     };
-  }, [active]);
+  }, [active, data]);
 
   const stats = getStats(trends[active].data);
 
@@ -118,8 +120,14 @@ export default function ActivityTrendsCard({ data }) {
                 borderWidth: 1,
                 padding: 10,
                 displayColors: false,
+                // callbacks: {
+                //   label: (ctx) => `${ctx.formattedValue} ${trends[active].unit}`,
+                // },
                 callbacks: {
-                  label: (ctx) => `${ctx.formattedValue} ${trends[active].unit}`,
+                  label: (ctx) => {
+                    const d = data[ctx.dataIndex];
+                    return `${ctx.formattedValue} ${trends[active].unit} (${d.sources?.join(", ")})`;
+                  },
                 },
               },
             },
@@ -169,6 +177,14 @@ export default function ActivityTrendsCard({ data }) {
             <strong>{Math.abs(stats.trendPct)}%</strong>
           </div>
         </div>
+      </div>
+
+      <div className="sources-row">
+        {data[data.length - 1]?.sources?.map((s) => (
+          <span key={s} className="source-pill">
+            {s === "apple_health" ? <FaApple /> : <SiGooglefit />}
+          </span>
+        ))}
       </div>
     </motion.div>
   );

@@ -25,7 +25,23 @@
   padding: 14px 10px;
   vertical-align: middle;
 }
+.activity-log-card .table-responsive {
+  max-height: 500px !important;
+  overflow-y: auto;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
 
+.activity-log-card .table-responsive::-webkit-scrollbar {
+  width: 5px;
+
+  background-color: #f7f8fc;
+}
+.activity-log-card .table-responsive::-webkit-scrollbar-thumb {
+  background-color: #7c4dff;
+  border-radius: 5px;
+  width: 5px;
+}
 /* Activity cell */
 .activity-cell {
   display: flex;

@@ -1,9 +1,19 @@
 import { motion } from "framer-motion";
 import { FaShieldAlt, FaDatabase, FaClock, FaCheckCircle } from "react-icons/fa";
 import "./ConfidenceCard.css";
+import AiBadge from "../../utils/aibadge";
 
 export default function ConfidenceCard({ confidence }) {
-  const percent = Math.round(confidence.value * 100);
+  const displayData =
+    typeof confidence === "string"
+      ? {
+          value: confidence === "Stable" ? 0.95 : 0.65,
+          label: confidence,
+          reason: `System reflects ${confidence.toLowerCase()} patterns.`,
+        }
+      : confidence;
+
+  const percent = Math.round(displayData.value * 100);
 
   return (
     <motion.div className="insight-card confidence-card" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
@@ -12,9 +22,12 @@ export default function ConfidenceCard({ confidence }) {
         <div className="confidence-title">
           <FaShieldAlt className="confidence-icon" />
           <h6>Confidence</h6>
+          <div>
+            <AiBadge text="AI Verified" /> {/* Using custom text */}
+          </div>
         </div>
 
-        <span className="confidence-label">{confidence.label}</span>
+        <span className="confidence-label">{displayData.label}</span>
       </div>
 
       {/* Ring */}
@@ -40,7 +53,7 @@ export default function ConfidenceCard({ confidence }) {
       </div>
 
       {/* Explanation */}
-      <p className="confidence-reason">{confidence.reason}</p>
+      <p className="confidence-reason">{displayData.label.reason}</p>
 
       {/* Info Chips */}
       <div className="confidence-chips">
