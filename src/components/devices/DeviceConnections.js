@@ -12,6 +12,7 @@ import { FaHeartbeat, FaPlus, FaApple, FaMobileAlt, FaWatchmanMonitoring } from 
 import api from "../../auth/api";
 import { useEffect } from "react";
 import QRCode from "react-qr-code";
+import baseUrl from "../../auth/baseUrl";
 
 const devicesList = [
   { id: "googlefit", name: "Google Fit", icon: SiGooglefit, color: "#4285F4" },
@@ -67,11 +68,6 @@ export default function DeviceConnections() {
       const res = await api.post("/auth/qr/generate");
 
       setQrToken(res.data.token);
-
-      // auto expire UI after 60s
-      // setTimeout(() => {
-      //   setQrToken(null);
-      // }, 60000);
     } catch (e) {
       toast.error("Failed to generate QR");
     } finally {
@@ -85,20 +81,6 @@ export default function DeviceConnections() {
       status: "disconnected",
     })),
   );
-
-  // const refreshDeviceStatus = async () => {
-  //   try {
-  //     const res = await api.get("/devices/status");
-
-  //     setDevices((prev) =>
-  //       prev.map((d) =>
-  //         d.id === "googlefit" ? { ...d, status: res.data.googlefit ? "connected" : "disconnected" } : d.id === "apple" ? { ...d, status: res.data.apple ? "connected" : "disconnected" } : d,
-  //       ),
-  //     );
-  //   } catch {
-  //     toast.error("Failed to refresh device status");
-  //   }
-  // };
 
   const refreshDeviceStatus = async () => {
     try {
@@ -121,69 +103,6 @@ export default function DeviceConnections() {
 
   const [showAppleModal, setShowAppleModal] = useState(false);
 
-  // const connectDevice = (id) => {
-  //   if (id === "apple") {
-  //     setShowAppleModal(true);
-  //     generateQr(); // ✅ ADD THIS
-  //     return;
-  //   }
-
-  //   const authUrls = {
-  //     googlefit: "http://localhost:5000/auth/google",
-  //     dexcom: "http://localhost:5000/auth/dexcom",
-  //   };
-
-  //   if (!authUrls[id]) {
-  //     toast("Coming soon 🚧");
-  //     return;
-  //   }
-
-  //   const width = 520;
-  //   const height = 620;
-
-  //   const left = window.screenX + (window.outerWidth - width) / 2;
-  //   const top = window.screenY + (window.outerHeight - height) / 2;
-
-  //   const popup = window.open(authUrls[id], `${id}Auth`, `width=${width},height=${height},left=${left},top=${top}`);
-  //   if (!popup) {
-  //     toast.error("Popup blocked. Please allow popups.");
-  //     return;
-  //   }
-
-  //   setDevices((prev) => prev.map((d) => (d.id === id ? { ...d, status: "connecting" } : d)));
-
-  //   const handleMessage = (event) => {
-  //     if (event.data === `${id}_connected`) {
-  //       toast.success(`${id === "dexcom" ? "Dexcom" : "Google Fit"} connected!`);
-  //       refreshDeviceStatus();
-  //       window.removeEventListener("message", handleMessage);
-  //     }
-  //   };
-
-  //   window.addEventListener("message", handleMessage);
-  //   toast.loading("Waiting for Google Fit authorization…", {
-  //     id: "googlefit-auth",
-  //   });
-
-  //   // 👂 Listen for success message
-  //   // const handleMessage = (event) => {
-  //   //   if (event.origin !== "http://localhost:3000") return;
-
-  //   //   if (event.data === "googlefit_connected") {
-  //   //     toast.success("Google Fit connected!", {
-  //   //       id: "googlefit-auth",
-  //   //     });
-
-  //   //     // Refresh device status
-  //   //     refreshDeviceStatus();
-
-  //   //     window.removeEventListener("message", handleMessage);
-  //   //   }
-  //   // };
-
-  //   // window.addEventListener("message", handleMessage);
-  // };
-
   const connectDevice = (id) => {
     if (id === "apple") {
       setShowAppleModal(true);
@@ -193,8 +112,8 @@ export default function DeviceConnections() {
 
     const jwtToken = localStorage.getItem("jwt");
     const authUrls = {
-      googlefit: `http://localhost:5000/auth/google?token=${jwtToken}`,
-      dexcom: `http://localhost:5000/auth/dexcom?token=${jwtToken}`,
+      googlefit: `${baseUrl}/auth/google?token=${jwtToken}&platform=web`,
+      dexcom: `${baseUrl}/auth/dexcom?token=${jwtToken}&platform=web`,
     };
 
     if (!authUrls[id]) {
@@ -292,7 +211,7 @@ export default function DeviceConnections() {
   useEffect(() => {
     if (!token) return;
 
-    const eventSource = new EventSource(`http://localhost:5000/devices/stream?token=${token}`);
+    const eventSource = new EventSource(`${baseUrl}/devices/stream?token=${token}`);
 
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);

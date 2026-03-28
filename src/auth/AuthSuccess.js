@@ -1,10 +1,11 @@
 import { useEffect } from "react";
+import baseUrl from "./baseUrl";
 
 export default function AuthSuccess() {
   useEffect(() => {
     // Notify opener window
     if (window.opener) {
-      window.opener.postMessage("googlefit_connected", "http://localhost:3000");
+      window.opener.postMessage("googlefit_connected", baseUrl);
     }
 
     // Close popup
